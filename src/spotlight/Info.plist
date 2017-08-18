@@ -26,13 +26,13 @@
   <key>CFBundleName</key>
   <string>$(PRODUCT_NAME)</string>
   <key>CFBundleShortVersionString</key>
-  <string>1.0</string>
+  <string>$(BUNDLE_SHORT_VERSION)</string>
   <key>CFBundleSupportedPlatforms</key>
   <array>
     <string>MacOSX</string>
   </array>
   <key>CFBundleVersion</key>
-  <string>1</string>
+  <string>$(BUNDLE_VERSION)</string>
   <key>CFPlugInDynamicRegisterFunction</key>
   <string></string>
   <key>CFPlugInDynamicRegistration</key>

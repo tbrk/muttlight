@@ -34,6 +34,9 @@ EXECUTABLE_NAME:=muttlight
 PRODUCT_BUNDLE_IDENTIFIER:=org.tbrk.muttlight
 PRODUCT_NAME:=muttlight
 
+BUNDLE_SHORT_VERSION:=1.0
+BUNDLE_VERSION:=1
+
 QL_EXECUTABLE_NAME:=muttlight-quicklook
 QL_PRODUCT_BUNDLE_IDENTIFIER:=org.tbrk.muttlight.quicklook
 QL_PRODUCT_NAME:=muttlight-quicklook
@@ -130,6 +133,8 @@ $(DSTDIR)/Contents/Info.plist: Info.plist $(DSTDIR)/Contents
 	  -e 's/$$(PRODUCT_NAME)/$(PRODUCT_NAME)/g' \
 	  -e 's/$$(MACOSX_DEPLOYMENT_TARGET)/$(MACOSX_DEPLOYMENT_TARGET)/g' \
 	  -e 's/$$(BUILD_MACHINE_OS_BUILD)/$(BUILD_MACHINE_OS_BUILD)/g' \
+	  -e 's/$$(BUNDLE_SHORT_VERSION)/$(BUNDLE_SHORT_VERSION)/g' \
+	  -e 's/$$(BUNDLE_VERSION)/$(BUNDLE_VERSION)/g' \
 	  $< >$@
 
 $(DSTDIR)/Contents/PkgInfo:
@@ -176,6 +181,8 @@ $(QL_DSTDIR)/Contents/Info.plist: $(QL)/Info.plist $(QL_DSTDIR)/Contents
 	  -e 's/$$(PRODUCT_NAME)/$(QL_PRODUCT_NAME)/g' \
 	  -e 's/$$(MACOSX_DEPLOYMENT_TARGET)/$(MACOSX_DEPLOYMENT_TARGET)/g' \
 	  -e 's/$$(BUILD_MACHINE_OS_BUILD)/$(BUILD_MACHINE_OS_BUILD)/g' \
+	  -e 's/$$(BUNDLE_SHORT_VERSION)/$(BUNDLE_SHORT_VERSION)/g' \
+	  -e 's/$$(BUNDLE_VERSION)/$(BUNDLE_VERSION)/g' \
 	  $< >$@
 
 $(QL_DSTDIR)/Contents/Resources/email.css: $(QL)/email.css \
@@ -232,6 +239,8 @@ $(SL_DSTDIR)/Contents/Info.plist: $(SL)/Info.plist $(SL_DSTDIR)/Contents
 	  -e 's/$$(PRODUCT_NAME)/$(SL_PRODUCT_NAME)/g' \
 	  -e 's/$$(MACOSX_DEPLOYMENT_TARGET)/$(MACOSX_DEPLOYMENT_TARGET)/g' \
 	  -e 's/$$(BUILD_MACHINE_OS_BUILD)/$(BUILD_MACHINE_OS_BUILD)/g' \
+	  -e 's/$$(BUNDLE_SHORT_VERSION)/$(BUNDLE_SHORT_VERSION)/g' \
+	  -e 's/$$(BUNDLE_VERSION)/$(BUNDLE_VERSION)/g' \
 	  $< >$@
 
 $(BUILD)/GetMetadataForFile.o: CINCLUDE += -I $(MUTT_SRC) -I $(ULOCAL)/include

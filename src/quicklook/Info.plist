@@ -2,6 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+        <key>BuildMachineOSBuild</key>
+        <string>$(BUILD_MACHINE_OS_BUILD))</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDocumentTypes</key>
@@ -24,9 +26,13 @@
 	<key>CFBundleName</key>
 	<string>$(PRODUCT_NAME)</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.0</string>
+	<string>$(BUNDLE_SHORT_VERSION)</string>
+	<key>CFBundleSupportedPlatforms</key>
+	<array>
+	  <string>MacOSX</string>
+	</array>
 	<key>CFBundleVersion</key>
-	<string>1</string>
+	<string>$(BUNDLE_VERSION)</string>
 	<key>CFPlugInDynamicRegisterFunction</key>
 	<string></string>
 	<key>CFPlugInDynamicRegistration</key>
