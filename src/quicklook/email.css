@@ -1,0 +1,50 @@
+
+.headers td {
+  font-family: monospace;
+  color: #808080;
+  vertical-align: top;
+}
+
+.headers tr.subject td {
+  color: #0000cd;
+}
+
+.headers .key {
+}
+
+.headers .value {
+}
+
+.messagebody {
+  font-family: monospace;
+  padding-top: 1em;
+}
+
+.thumbnail .messagebody {
+  min-width: 45em;
+  padding-right: .5em;
+}
+
+.preview .messagebody {
+  max-width: 50em;
+}
+
+.messagebody .nobody {
+  color: #ff7f50;
+}
+
+.attachmsg {
+  color: #b22222;
+}
+
+.quoted  { color: blue; }
+.quoted1 { color: cyan; }
+.quoted2 { color: darkkhaki; }
+.quoted3 { color: red; }
+.quoted4 { color: orange; }
+.quoted5 { color: blue; }
+.quoted6 { color: cyan; }
+.quoted7 { color: darkkhaki; }
+.quoted8 { color: red; }
+.quoted9 { color: orange; }
+
