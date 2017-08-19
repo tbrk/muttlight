@@ -92,6 +92,9 @@ package: $(DSTDIR)/Contents/MacOS/muttlight \
 	touch $(DSTDIR)/Contents/MacOS/muttlight
 	#$(LSREGISTER) -f $(DSTDIR)
 
+$(BUILD)/fwrapdata.o: fwrapdata.c fwrapdata.h $(BUILD)
+	$(CC) -c $< -o $@
+
 # main app and user interface
 
 MUTTLIGHT_OBJS:=$(BUILD)/AppDelegate.o \
