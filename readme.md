@@ -46,7 +46,8 @@ previewed as in the mutt pager. It will probably be necessary to
 before the search results are named correctly (the `mds` and `mds_stores` 
 processes become active during reindexing).
 
-Run the following command and search for `muttlight` to see registered file extensions and plugin “claims”.
+Run the following command and search for `muttlight` to see registered file 
+extensions and plugin “claims”.
 
 ```
 /System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Versions/A/Support/lsregister -dump | less
