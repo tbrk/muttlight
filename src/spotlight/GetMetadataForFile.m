@@ -117,6 +117,12 @@ Boolean GetMetadataForFile(void *thisInterface,
 	    fclose(fin);
 	}
 
+	// TODO: implement proper RFC2047 and HTML decoding
+	SETDATA(kMDItemTextContent, [[NSString alloc]
+		initWithContentsOfFile:path
+			      encoding:NSUTF8StringEncoding
+			      error:&error]);
+
 	if (headers != NULL) {
 	    NSTextCheckingResult *match;
 	    NSMutableArray *from_names = [[NSMutableArray alloc] init];
