@@ -112,8 +112,10 @@ Boolean GetMetadataForFile(void *thisInterface,
 
 	fin = fopen([path cStringUsingEncoding: NSUTF8StringEncoding], "r");
 
-	if (fin != NULL)
+	if (fin != NULL) {
 	    headers = mutt_read_rfc822_header(fin, NULL, 0, 0);
+	    fclose(fin);
+	}
 
 	if (headers != NULL) {
 	    NSTextCheckingResult *match;
