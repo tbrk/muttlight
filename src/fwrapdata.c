@@ -23,7 +23,7 @@
  * 2017 Timothy Bourke (tim@tbrk.org)
  */
 
-#include <CoreFoundation/CoreFoundation.h>
+#include "fwrapdata.h"
 
 typedef struct fstate {
     CFMutableDataRef data;
@@ -101,6 +101,8 @@ static fpos_t seekfn(void *handler, fpos_t offset, int whence)
 
 static int closefn(void *handler)
 {
+    fstate_t *state = handler;
+    CFRelease(state->data);
     free(handler);
     return 0;
 }
@@ -111,6 +113,7 @@ FILE *fwrapdata(CFMutableDataRef data)
     memset(state, 0, sizeof(fstate_t));
 
     state->data = data;
+    CFRetain(state->data);
 
     return funopen(state, readfn, writefn, seekfn, closefn);
 }
