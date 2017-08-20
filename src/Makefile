@@ -88,7 +88,8 @@ package: $(DSTDIR)/Contents/MacOS/muttlight \
 	 $(DSTDIR)/Contents/Resources/Base.lproj/MainMenu.nib \
 	 $(DSTDIR)/Contents/Resources/AppIcon.icns \
 	 $(DSTDIR)/Contents/Info.plist \
-	 $(DSTDIR)/Contents/PkgInfo
+	 $(DSTDIR)/Contents/PkgInfo \
+	 $(DSTDIR)/Contents/MacOS/open_message.sh
 	touch $(DSTDIR)/Contents/MacOS/muttlight
 	#$(LSREGISTER) -f $(DSTDIR)
 
@@ -142,6 +143,10 @@ $(DSTDIR)/Contents/Info.plist: Info.plist $(DSTDIR)/Contents
 	  -e 's/$$(BUNDLE_SHORT_VERSION)/$(BUNDLE_SHORT_VERSION)/g' \
 	  -e 's/$$(BUNDLE_VERSION)/$(BUNDLE_VERSION)/g' \
 	  $< >$@
+
+$(DSTDIR)/Contents/MacOS/open_message.sh: open_message.sh \
+    		$(DSTDIR)/Contents/MacOS
+	cp $< $@
 
 $(DSTDIR)/Contents/PkgInfo:
 	printf 'APPLmutl' > $@
