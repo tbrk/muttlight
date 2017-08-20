@@ -21,7 +21,7 @@
 #include <QuickLook/QuickLook.h>
 #include <sys/syslimits.h>
 
-#include "muttiface.h"
+#include "../muttiface.h"
 
 extern CFDictionaryRef email_css;
 

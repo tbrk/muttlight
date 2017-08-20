@@ -43,8 +43,8 @@
 #include <unistd.h>	// fork, getopt
 #include <string.h>	// strspn, strcspn
 
-#include "../fwrapdata.h"
-#include "../entities.h"
+#include "fwrapdata.h"
+#include "entities.h"
 
 // TODO: Robust handling of errors
 // TODO: Localize header strings; can mutt do this?

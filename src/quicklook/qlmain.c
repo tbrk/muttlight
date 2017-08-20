@@ -21,7 +21,7 @@
 #include <CoreServices/CoreServices.h>
 #include <QuickLook/QuickLook.h>
 
-#include "muttiface.h"
+#include "../muttiface.h"
 
 /* ** globals */
 

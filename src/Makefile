@@ -199,7 +199,7 @@ $(QL_DSTDIR)/Contents/Resources/email.css: $(QL)/email.css \
 	cp $< $@
 
 # for testing
-$(BUILD)/muttiface: $(QL)/muttiface.c $(QL)/muttiface.h $(BUILD)/mutt.o \
+$(BUILD)/muttiface: muttiface.c muttiface.h $(BUILD)/mutt.o \
     		$(BUILD)/fwrapdata.o $(BUILD)/entities.o
 	$(CC) $(CFLAGS) -o $@ -DTESTING=1 -I $(MUTT_SRC) \
 	    $< $(BUILD)/mutt.o $(BUILD)/fwrapdata.o $(BUILD)/entities.o \
@@ -209,8 +209,7 @@ $(BUILD)/muttiface: $(QL)/muttiface.c $(QL)/muttiface.h $(BUILD)/mutt.o \
 $(BUILD)/GenerateThumbnailForURL.o: $(QL)/GenerateThumbnailForURL.c $(BUILD)
 $(BUILD)/GeneratePreviewForURL.o: $(QL)/GeneratePreviewForURL.c $(BUILD)
 $(BUILD)/muttiface.o: CINCLUDE += -I $(MUTT_SRC) -I $(ULOCAL)/include
-$(BUILD)/muttiface.o: $(QL)/muttiface.c $(QL)/muttiface.h $(BUILD)
-$(BUILD)/muttiface.o: $(QL)/muttiface.c $(QL)/muttiface.h $(BUILD)
+$(BUILD)/muttiface.o: muttiface.c muttiface.h $(BUILD)
 $(BUILD)/qlmain.o: $(QL)/qlmain.c $(BUILD)
 
 $(QL_DSTDIR): $(DSTDIR)/Contents/Library
