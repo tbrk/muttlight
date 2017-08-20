@@ -95,6 +95,9 @@ package: $(DSTDIR)/Contents/MacOS/muttlight \
 $(BUILD)/fwrapdata.o: fwrapdata.c fwrapdata.h $(BUILD)
 	$(CC) -c $< -o $@
 
+$(BUILD)/entities.o: entities.c entities.h $(BUILD)
+	$(CC) -c $< -o $@
+
 # main app and user interface
 
 MUTTLIGHT_OBJS:=$(BUILD)/AppDelegate.o \
