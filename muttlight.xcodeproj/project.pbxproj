@@ -39,19 +39,19 @@
 /* End PBXGroup section */
 
 /* Begin PBXLegacyTarget section */
-		055993CA1F462B2A0015D655 /* muttlight */ = {
+		055993CA1F462B2A0015D655 /* Muttlight */ = {
 			isa = PBXLegacyTarget;
 			buildArgumentsString = "$(ACTION)";
-			buildConfigurationList = 055993CD1F462B2A0015D655 /* Build configuration list for PBXLegacyTarget "muttlight" */;
+			buildConfigurationList = 055993CD1F462B2A0015D655 /* Build configuration list for PBXLegacyTarget "Muttlight" */;
 			buildPhases = (
 			);
 			buildToolPath = /usr/bin/make;
-			buildWorkingDirectory = /Users/tbourke/Projects/muttlight/muttlight/src;
+			buildWorkingDirectory = ./src;
 			dependencies = (
 			);
-			name = muttlight;
+			name = Muttlight;
 			passBuildSettingsInEnvironment = 1;
-			productName = muttlight;
+			productName = Muttlight;
 		};
 /* End PBXLegacyTarget section */
 
@@ -68,7 +68,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 055993C91F462B2A0015D655 /* Build configuration list for PBXProject "muttlight" */;
+			buildConfigurationList = 055993C91F462B2A0015D655 /* Build configuration list for PBXProject "Muttlight" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -79,7 +79,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				055993CA1F462B2A0015D655 /* muttlight */,
+				055993CA1F462B2A0015D655 /* Muttlight */,
 			);
 		};
 /* End PBXProject section */
@@ -192,7 +192,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		055993C91F462B2A0015D655 /* Build configuration list for PBXProject "muttlight" */ = {
+		055993C91F462B2A0015D655 /* Build configuration list for PBXProject "Muttlight" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				055993CB1F462B2A0015D655 /* Debug */,
@@ -201,7 +201,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		055993CD1F462B2A0015D655 /* Build configuration list for PBXLegacyTarget "muttlight" */ = {
+		055993CD1F462B2A0015D655 /* Build configuration list for PBXLegacyTarget "Muttlight" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				055993CE1F462B2A0015D655 /* Debug */,

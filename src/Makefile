@@ -30,9 +30,9 @@ ACFLAGS+=--notices --warnings
 
 LSREGISTER:=/System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister
 
-EXECUTABLE_NAME:=muttlight
+EXECUTABLE_NAME:=Muttlight
 PRODUCT_BUNDLE_IDENTIFIER:=org.tbrk.muttlight
-PRODUCT_NAME:=muttlight
+PRODUCT_NAME:=Muttlight
 
 BUNDLE_SHORT_VERSION:=1.0
 BUNDLE_VERSION:=1
@@ -84,13 +84,13 @@ MUTT_LIBS:=-lintl -liconv
 
 app: package qlpackage slpackage
 
-package: $(DSTDIR)/Contents/MacOS/muttlight \
+package: $(DSTDIR)/Contents/MacOS/Muttlight \
 	 $(DSTDIR)/Contents/Resources/Base.lproj/MainMenu.nib \
 	 $(DSTDIR)/Contents/Resources/AppIcon.icns \
 	 $(DSTDIR)/Contents/Info.plist \
 	 $(DSTDIR)/Contents/PkgInfo \
 	 $(DSTDIR)/Contents/MacOS/open_message.sh
-	touch $(DSTDIR)/Contents/MacOS/muttlight
+	touch $(DSTDIR)/Contents/MacOS/Muttlight
 	#$(LSREGISTER) -f $(DSTDIR)
 
 $(BUILD)/fwrapdata.o: fwrapdata.c fwrapdata.h $(BUILD)
@@ -104,7 +104,7 @@ $(BUILD)/entities.o: entities.c entities.h $(BUILD)
 MUTTLIGHT_OBJS:=$(BUILD)/AppDelegate.o \
     		$(BUILD)/main.o
 
-$(DSTDIR)/Contents/MacOS/muttlight: $(MUTTLIGHT_OBJS) $(DSTDIR)/Contents/MacOS
+$(DSTDIR)/Contents/MacOS/Muttlight: $(MUTTLIGHT_OBJS) $(DSTDIR)/Contents/MacOS
 	MACOSX_DEPLOYMENT_TARGET=$(MACOSX_DEPLOYMENT_TARGET) \
 	$(CC) -fobjc-arc -arch $(ARCH) $(CFLAGS) $(MACOSX) \
 		$(CC_LDFLAGS) -framework Cocoa $(MUTTLIGHT_OBJS) -o $@

@@ -37,8 +37,6 @@
 	<key>CFBundleDocumentTypes</key>
 	<array>
 	  <dict>
-	    <key>CFBundleTypeIconFiles</key>
-	    <array/>
 	    <key>CFBundleTypeName</key>
 	    <string>MailDir Email Message</string>
 	    <key>CFBundleTypeRole</key>

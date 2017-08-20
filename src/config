@@ -3,7 +3,7 @@
 
 XCODE_DEVELOPER_PATH=/Applications/Xcode.app/Contents/Developer
 
-DSTDIR=muttlight.app
+DSTDIR=Muttlight.app
 
 MUTT_SRC=./mutt
 
