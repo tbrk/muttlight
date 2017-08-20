@@ -37,4 +37,6 @@ struct mutt_to_html_args {
 
 void mutt_to_html(struct mutt_to_html_args *);
 
+CFMutableDataRef mutt_message_text(char *msgpath);
+
 #endif

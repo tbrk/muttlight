@@ -93,10 +93,10 @@ package: $(DSTDIR)/Contents/MacOS/muttlight \
 	#$(LSREGISTER) -f $(DSTDIR)
 
 $(BUILD)/fwrapdata.o: fwrapdata.c fwrapdata.h $(BUILD)
-	$(CC) -c $< -o $@
+	$(CC) -c $< -o $@ $(MACOSX)
 
 $(BUILD)/entities.o: entities.c entities.h $(BUILD)
-	$(CC) -c $< -o $@
+	$(CC) -c $< -o $@ $(MACOSX)
 
 # main app and user interface
 
@@ -164,7 +164,10 @@ QL_DSTDIR:=$(DSTDIR)/Contents/Library/QuickLook/muttlight.qlgenerator
 QUICKLOOK_OBJS:=$(BUILD)/muttiface.o \
     		$(BUILD)/GenerateThumbnailForURL.o \
 		$(BUILD)/GeneratePreviewForURL.o \
-		$(BUILD)/qlmain.o
+		$(BUILD)/qlmain.o \
+		$(BUILD)/fwrapdata.o \
+		$(BUILD)/entities.o \
+		$(BUILD)/mutt.o
 
 qlpackage: $(QL_DSTDIR)/Contents/MacOS/muttlight-quicklook \
 	   $(QL_DSTDIR)/Contents/Info.plist \
@@ -172,10 +175,10 @@ qlpackage: $(QL_DSTDIR)/Contents/MacOS/muttlight-quicklook \
 	touch $(QL_DSTDIR)/Contents/MacOS/muttlight-quicklook
 
 $(QL_DSTDIR)/Contents/MacOS/muttlight-quicklook: $(QUICKLOOK_OBJS) \
-    		$(BUILD)/mutt.o $(QL_DSTDIR)/Contents/MacOS
+		$(QL_DSTDIR)/Contents/MacOS
 	MACOSX_DEPLOYMENT_TARGET=$(MACOSX_DEPLOYMENT_TARGET) \
 	$(CC) -bundle -arch $(ARCH) $(CFLAGS) $(MACOSX) \
-		$(CC_LDFLAGS) $(QUICKLOOK_OBJS) $(BUILD)/mutt.o \
+		$(CC_LDFLAGS) $(QUICKLOOK_OBJS) \
 		-L$(ULOCAL)/lib $(MUTT_LIBS) -lncurses \
 		-framework CoreServices -framework QuickLook \
 		-o $@
@@ -196,9 +199,11 @@ $(QL_DSTDIR)/Contents/Resources/email.css: $(QL)/email.css \
 	cp $< $@
 
 # for testing
-$(BUILD)/muttiface: $(QL)/muttiface.c $(QL)/muttiface.h $(BUILD)/mutt.o
+$(BUILD)/muttiface: $(QL)/muttiface.c $(QL)/muttiface.h $(BUILD)/mutt.o \
+    		$(BUILD)/fwrapdata.o $(BUILD)/entities.o
 	$(CC) $(CFLAGS) -o $@ -DTESTING=1 -I $(MUTT_SRC) \
-	    $< $(BUILD)/mutt.o -Wl,-dead_strip $(MUTT_LIBS) -lncurses \
+	    $< $(BUILD)/mutt.o $(BUILD)/fwrapdata.o $(BUILD)/entities.o \
+	    -Wl,-dead_strip $(MUTT_LIBS) -lncurses \
 	    -framework CoreFoundation
 
 $(BUILD)/GenerateThumbnailForURL.o: $(QL)/GenerateThumbnailForURL.c $(BUILD)

@@ -219,6 +219,9 @@ kMDItemContentTypeTree         = (                            UTI hierarchy of f
 ) ?
 ```
 
+The size of the Spotlight index for a given volume can be determined by 
+running `du -h -d 1 /.Spotlight-V100`.
+
 Spotlight still indexes files when no plugin is registered for them—that is, 
 the files appear in the search results for keywords that they contain. It 
 seems just to treat their contents as plain text. When a plugin is 
@@ -227,31 +230,32 @@ the `kMDItemTextContent` field. There are at least four possible ways to do
 this.
 
 1. Recurse through the message (MIME) parts, including text directly, 
-   turning HTML into text (using `NSAttributedString initWithHTML/string`), 
-   and possibly calling other filters to treat binary attachments. This is 
-   the ideal solution, but demands non-negligible programming and debugging 
-   time.
+   turning HTML into text, and possibly calling other filters to treat 
+   binary attachments. This is the ideal solution, but demands 
+   non-negligible programming and debugging time.
 
 2. Use the mutt pager to turn a message into plain text, as is already done 
    for the Quick Look plugin. This approach leverages the existing mutt code 
    and attachments can be treated using the mailcap mechanism. The 
    disadvantage is that many types of attachements (.pdf, .xls, .doc, 
    etcetera) are not normally displayed as plain text by mutt. 
-   Unfortunately, this approach does not work since Spotlight importers 
-   execute in a sandbox which seems to prohibit them from creating temporary 
-   files and directories. The calls to `mkdtemp` in the mutt pager thus fail 
-   and the plugin crashes.
+   Unfortunately, this approach is not easy to implement without duplicating 
+   much of the mutt source code, since Spotlight importers execute in a 
+   sandbox which seems to prohibit them from creating temporary files and 
+   directories. The calls to `mkdtemp` in the mutt pager thus fail and the 
+   plugin crashes.
 
 3. Simply slurp the whole file into `kMDItemTextContent`. This approach is 
-   easy to implement and no worse than before installation of the plugin. 
-   Besides not properly treating file attachments, it does not decode 
-   RFC2045 text nor strip tags from HTML. This is the solution chosen for 
-   the first version of the application.
+   easy to implement and may be no worse than before installation of the 
+   plugin. Besides not properly treating file attachments, it does not 
+   decode RFC2045 text nor strip tags from HTML. It may cause spotlight to 
+   generate a larger index file than necessary.
 
 4. Use a hybrid of 1 and 3: recurse through the parts, using mutt functions 
-   to decode RFC2045 text and `NSAttributedString` to decode HTML, and 
-   ignoring other attachments. This may be a reasonable compromise between 
-   development effort and results. For version 2?
+   to decode RFC2045 text and `NSAttributedString` or custom code to decode 
+   HTML, and ignoring other attachments. This seems to be a reasonable 
+   compromise between development effort and results. It has been 
+   implemented in the current version.
 
 Quick Look
 ==========
