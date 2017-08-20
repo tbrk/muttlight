@@ -300,8 +300,17 @@ BOOL updatePlistFilenameExtensions(NSURL *plistPath, NSArray *extensions)
 
 - (BOOL)application:(NSApplication *)sender openFile:(NSString *)filename
 {
-    NSLog(@"request to open '%@'", filename); // XXX
-    return NO;
+    NSBundle *bundle = [NSBundle bundleWithIdentifier: MUTTLIGHT_KEY];
+    NSURL *bundle_url = [bundle bundleURL];
+    NSURL *script_url = [NSURL URLWithString: @"Contents/MacOS/open_message.sh"
+               relativeToURL:bundle_url];
+
+    NSTask *task = [[NSTask alloc] init];
+    task.launchPath = [script_url path];
+    task.arguments = @[filename];
+    [task launch];
+
+    return YES;
 }
 
 - (BOOL)applicationShouldTerminateAfterLastWindowClosed:(NSApplication *)sender
