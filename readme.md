@@ -109,6 +109,20 @@ message.
 Altogether, these features allow a rapid configuration and natural 
 integration of MailDir contents into the MacOS user interface.
 
+### Other Solutions
+
+There are, of course, other ways to index and search mail messages in 
+MailDir format. For instance, I already use 
+[mairix](http://www.rpcurnow.force9.co.uk/mairix/) on both MacOS and Linux, 
+and it works well once you get the hang of it. It has the advantage of 
+working specifically with mail files and of showing the results directly 
+within Mutt.
+
+The advantage of Spotlight is that the indexes are kept up-to-date more 
+dynamically and they span all files and file types on a system. Muttlight 
+allows more convenient browsing of mail messages when they come up amongst 
+other results (pdfs, text files, source code, etcetera).
+
 Debugging
 ---------
 
