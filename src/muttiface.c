@@ -936,7 +936,12 @@ static void body_handler(BODY *b, STATE *s)
     run_decode_and_handler(b, s, handler, plaintext);
 }
 
-CFMutableDataRef mutt_message_text(char *msgpath)
+void free_message_header(void)
+{
+    free_message(Context);
+}
+
+CFMutableDataRef mutt_message_text(char *msgpath, void **hdr)
 {
     char *path, *msgname, *subdir;
     int msgno;
@@ -973,7 +978,10 @@ CFMutableDataRef mutt_message_text(char *msgpath)
 
     mx_close_message(Context, &msg);
 
-    free_message(Context);
+    if (hdr == NULL)
+	free_message_header();
+    else
+	*hdr = (void *)Context->hdrs[msgno];
 
     FREE(&msgname);
     FREE(&path);
@@ -1038,7 +1046,7 @@ int main(int argc, char **argv, char **environ)
 
     if (tflag) {
 	// show text for indexing
-	data = mutt_message_text(argv[0]);
+	data = mutt_message_text(argv[0], NULL);
 
 	show_data(data);
 	CFRelease(data);

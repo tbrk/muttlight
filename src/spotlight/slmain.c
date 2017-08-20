@@ -16,9 +16,11 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#import <CoreFoundation/CoreFoundation.h>
-#import <CoreFoundation/CFPlugInCOM.h>
-#import <CoreServices/CoreServices.h>
+#include <CoreFoundation/CoreFoundation.h>
+#include <CoreFoundation/CFPlugInCOM.h>
+#include <CoreServices/CoreServices.h>
+
+#include "../muttiface.h"
 
 //  constants
 
@@ -88,6 +90,9 @@ AllocMetadataImporterPluginType(CFUUIDRef inFactoryID)
     /*  Retain and keep an open instance refcount for each factory. */
     theNewInstance->factoryID = CFRetain(inFactoryID);
     CFPlugInAddInstanceForFactory(inFactoryID);
+
+    /* Initialize global structures */
+    init_mutt_iface(NULL);
 
     /* Returns the IUnknown interface so set the refCount to one. */
     theNewInstance->refCount = 1;

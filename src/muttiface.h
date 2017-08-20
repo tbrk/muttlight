@@ -37,6 +37,12 @@ struct mutt_to_html_args {
 
 void mutt_to_html(struct mutt_to_html_args *);
 
-CFMutableDataRef mutt_message_text(char *msgpath);
+void free_message_header(void);
+
+// if hdr != NULL, it is pointed at the HEADER of the parsed message
+// and (in this case only) it is necessary to call free_message_header()
+// when it is no longer in use (and before any subsequent calls to
+// mutt_message_text).
+CFMutableDataRef mutt_message_text(char *msgpath, void **hdr);
 
 #endif

@@ -21,26 +21,14 @@
 #include <CoreFoundation/CoreFoundation.h>
 #import <CoreData/CoreData.h>
 
+#include "../muttiface.h"
+
 #include <time.h>
 
-// Incorporate functions from mutt
-
-#define MAIN_C 1
 #include "config.h"
-
-/* needed to link with mutt code */
-char **envlist;
-
 #include "mutt.h"
 #include "charset.h"
 #include "rfc2047.h"
-
-void (*mutt_error) (const char *, ...) = mutt_nocurses_error;
-
-void mutt_exit (int code)
-{
-  exit (code);
-}
 
 static NSString *str(const char *s)
 {
@@ -107,21 +95,19 @@ Boolean GetMetadataForFile(void *thisInterface,
     if ([(__bridge NSString *)contentTypeUTI
 	    isEqualToString:@"org.tbrk.muttlight.email"])
     {
-	FILE *fin;
+	HEADER *hdr;
 	ENVELOPE *headers = NULL;
+	NSMutableData *text;
+	char *cpath = safe_strdup(
+		[path cStringUsingEncoding: NSUTF8StringEncoding]);
 
-	fin = fopen([path cStringUsingEncoding: NSUTF8StringEncoding], "r");
-
-	if (fin != NULL) {
-	    headers = mutt_read_rfc822_header(fin, NULL, 0, 0);
-	    fclose(fin);
-	}
-
-	// TODO: implement proper RFC2047 and HTML decoding
-	SETDATA(kMDItemTextContent, [[NSString alloc]
-		initWithContentsOfFile:path
-			      encoding:NSUTF8StringEncoding
-			      error:&error]);
+	text = (__bridge NSMutableData *)
+		    mutt_message_text(cpath, (void **)&hdr);
+	FREE(&cpath);
+	SETDATA(kMDItemTextContent,
+		[[NSString alloc] initWithData:text
+				      encoding:NSUTF8StringEncoding]);
+	headers = hdr->env;
 
 	if (headers != NULL) {
 	    NSTextCheckingResult *match;
@@ -181,10 +167,11 @@ Boolean GetMetadataForFile(void *thisInterface,
 		SETSDATA(@"com_apple_mail_repliedTo",
 			 [NSNumber numberWithUnsignedInteger: range_R.length]);
 	    }
-
-	    mutt_free_envelope(&headers);
 	}
-    }
+
+	free_message_header();
+    } else
+	NSLog(@"%@ not registered as org.tbrk.muttlight.email!", path);
 
     } // autorelease pool
     

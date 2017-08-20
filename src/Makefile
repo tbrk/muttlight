@@ -161,10 +161,10 @@ $(BUILD)/mutt.o:
 QL:=./quicklook
 QL_DSTDIR:=$(DSTDIR)/Contents/Library/QuickLook/muttlight.qlgenerator
 
-QUICKLOOK_OBJS:=$(BUILD)/muttiface.o \
-    		$(BUILD)/GenerateThumbnailForURL.o \
+QUICKLOOK_OBJS:=$(BUILD)/GenerateThumbnailForURL.o \
 		$(BUILD)/GeneratePreviewForURL.o \
 		$(BUILD)/qlmain.o \
+		$(BUILD)/muttiface.o \
 		$(BUILD)/fwrapdata.o \
 		$(BUILD)/entities.o \
 		$(BUILD)/mutt.o
@@ -227,7 +227,11 @@ SL:=./spotlight
 SL_DSTDIR:=$(DSTDIR)/Contents/Library/Spotlight/muttlight.mdimporter
 
 SPOTLIGHT_OBJS:=$(BUILD)/GetMetadataForFile.o \
-    		$(BUILD)/slmain.o
+    		$(BUILD)/slmain.o \
+	        $(BUILD)/muttiface.o \
+	        $(BUILD)/fwrapdata.o \
+	        $(BUILD)/entities.o \
+	        $(BUILD)/mutt.o
 
 slpackage: $(SL_DSTDIR)/Contents/MacOS/muttlight-spotlight \
 	   $(SL_DSTDIR)/Contents/Info.plist
@@ -237,7 +241,7 @@ $(SL_DSTDIR)/Contents/MacOS/muttlight-spotlight: $(SPOTLIGHT_OBJS) \
     		$(BUILD)/mutt.o $(SL_DSTDIR)/Contents/MacOS
 	MACOSX_DEPLOYMENT_TARGET=$(MACOSX_DEPLOYMENT_TARGET) \
 	$(CC) -fobjc-arc -bundle -arch $(ARCH) $(CFLAGS) $(MACOSX) \
-		$(CC_LDFLAGS) $(SPOTLIGHT_OBJS) $(BUILD)/mutt.o \
+		$(CC_LDFLAGS) $(SPOTLIGHT_OBJS) \
 		-L$(ULOCAL)/lib $(MUTT_LIBS) -lncurses \
 		-framework CoreServices \
 		-o $@
