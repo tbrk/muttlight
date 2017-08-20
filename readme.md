@@ -12,6 +12,22 @@ thumbnails, and allows files to be opened directly in Mutt.
 
 **Pull requests are welcome.**
 
+## TODO
+
+* Improve and document the build system (including Mutt source).
+* Fix the handling of environments and configuration files to avoid, for 
+  example, problems finding `w3m` when previewing or opening mail files.
+  Maybe include a special `muttrc` file inside the package?
+* More rigorous testing and error handling.
+* Reconfigure the GUI with a “Preferences” menu item that shows the window 
+  with the list of extensions. Do not display this window if Muttlight is 
+  launched to open a mail.
+* Setup the Preferences window so that its last location is remembered 
+  properly.
+* Ensure that adding and removing extensions works correctly (may need to 
+  launch `lsregister`? or `touch` the executable?).
+  Must we retrigger an `mdimport`?
+
 Background
 ----------
 
@@ -168,19 +184,4 @@ extensions and plugin “claims”.
 ```
 /System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Versions/A/Support/lsregister -dump | less
 ```
-
-## TODO
-
-* Fix the handling of environments and configuration files to avoid, for 
-  example, problems finding `w3m` when previewing or opening mail files.
-  Maybe include a special `muttrc` file inside the package?
-* More rigorous testing and error handling.
-* Reconfigure the GUI with a “Preferences” menu item that shows the window 
-  with the list of extensions. Do not display this window if Muttlight is 
-  launched to open a mail.
-* Setup the Preferences window so that its last location is remembered 
-  properly.
-* Ensure that adding and removing extensions works correctly (may need to 
-  launch `lsregister`? or `touch` the executable?).
-  Must we retrigger an `mdimport`?
 
