@@ -135,9 +135,12 @@ BOOL updatePlistFilenameExtensions(NSURL *plistPath, NSArray *extensions)
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-    [self dictToExtensions:
-        [prefs dictionaryForKey: @"extensions"]];
+    NSDictionary *exts = [prefs dictionaryForKey: @"extensions"];
 
+    if (exts == nil)
+	exts = @{ @"mbox" : @YES };
+
+    [self dictToExtensions: exts];
     [self startSearching];
 }
 
