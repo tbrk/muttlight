@@ -16,8 +16,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-/* TODO: Results are not grouped with "MAIL & MESSAGES" in Spotlight results. */
-
 #include <CoreFoundation/CoreFoundation.h>
 #import <CoreData/CoreData.h>
 

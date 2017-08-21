@@ -23,9 +23,6 @@ native Terminal session, with Mutt open on the selected message.
 ## TODO
 
 * Improve and document the build system (including Mutt source).
-* Fix the handling of environments and configuration files to avoid, for 
-  example, problems finding `w3m` when previewing or opening mail files.
-  Maybe include a special `muttrc` file inside the package?
 * More rigorous testing and error handling.
 * Setup the Preferences window so that its last location is remembered 
   properly.

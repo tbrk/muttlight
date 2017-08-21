@@ -23,6 +23,8 @@
 
 #include "../muttiface.h"
 
+extern char **environ; // process environment
+
 /* ** globals */
 
 CFDictionaryRef email_css;
@@ -148,11 +150,7 @@ AllocQuickLookGeneratorPluginType(CFUUIDRef inFactoryID)
     CFPlugInAddInstanceForFactory(inFactoryID);
     
     /* Initialize global structures */
-    // TODO: pass address to config file
-    // Set path with: mutt_str_replace (&Muttrc, optarg);
-    // Ignore system rc file: flags |= MUTT_NOSYSRC;
-    //			     (pass to mutt_init)
-    init_mutt_iface(NULL);
+    init_mutt_iface(environ);
     
     values[0] = (void *)CFSTR("text/css");
     values[1] = NULL;
