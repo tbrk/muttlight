@@ -460,7 +460,7 @@ There are API functions to convert other type identifiers (OSType, MIME, etc) to
 
 Dump the launch services database:
 ```
-/System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister -dump`
+/System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister -dump
 ```
 
 Register the UTIs and file extensions declared in an app's `Info.plist`:

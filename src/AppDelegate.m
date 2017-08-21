@@ -122,6 +122,14 @@ BOOL updatePlistFilenameExtensions(NSURL *plistPath, NSArray *extensions)
                 regularExpressionWithPattern:@".*,S=\\d+,W=\\d+$"
                                      options:0
                                        error:&error];
+
+	// Register the internalized app with LaunchServices
+	NSBundle *bundle = [NSBundle bundleWithIdentifier: MUTTLIGHT_KEY];
+	NSURL *bundle_url = [bundle bundleURL];
+	NSURL *launcher_url = [NSURL
+		URLWithString: @"Contents/MacOS/Muttlight Launcher.app"
+		relativeToURL:bundle_url];
+	LSRegisterURL((__bridge CFURLRef)launcher_url, false);
     }
 
     return self;
@@ -314,17 +322,7 @@ BOOL updatePlistFilenameExtensions(NSURL *plistPath, NSArray *extensions)
 
 - (BOOL)application:(NSApplication *)sender openFile:(NSString *)filename
 {
-    NSBundle *bundle = [NSBundle bundleWithIdentifier: MUTTLIGHT_KEY];
-    NSURL *bundle_url = [bundle bundleURL];
-    NSURL *script_url = [NSURL URLWithString: @"Contents/MacOS/open_message.sh"
-               relativeToURL:bundle_url];
-
-    NSTask *task = [[NSTask alloc] init];
-    task.launchPath = [script_url path];
-    task.arguments = @[filename];
-    [task launch];
-
-    return YES;
+    return NO;
 }
 
 - (BOOL)applicationShouldTerminateAfterLastWindowClosed:(NSApplication *)sender

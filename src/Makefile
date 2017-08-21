@@ -30,6 +30,8 @@ ACFLAGS+=--notices --warnings
 
 LSREGISTER:=/System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister
 
+MUTTLIGHT_LAUNCHER:=../Muttlight\ Launcher.app
+
 EXECUTABLE_NAME:=Muttlight
 PRODUCT_BUNDLE_IDENTIFIER:=org.tbrk.muttlight
 PRODUCT_NAME:=Muttlight
@@ -89,7 +91,7 @@ package: $(DSTDIR)/Contents/MacOS/Muttlight \
 	 $(DSTDIR)/Contents/Resources/AppIcon.icns \
 	 $(DSTDIR)/Contents/Info.plist \
 	 $(DSTDIR)/Contents/PkgInfo \
-	 $(DSTDIR)/Contents/MacOS/open_message.sh
+	 $(DSTDIR)/Contents/MacOS/Muttlight\ Launcher.app
 	touch $(DSTDIR)/Contents/MacOS/Muttlight
 	#$(LSREGISTER) -f $(DSTDIR)
 
@@ -144,12 +146,13 @@ $(DSTDIR)/Contents/Info.plist: Info.plist $(DSTDIR)/Contents
 	  -e 's/$$(BUNDLE_VERSION)/$(BUNDLE_VERSION)/g' \
 	  $< >$@
 
-$(DSTDIR)/Contents/MacOS/open_message.sh: open_message.sh \
-    		$(DSTDIR)/Contents/MacOS
-	cp $< $@
-
 $(DSTDIR)/Contents/PkgInfo:
 	printf 'APPLmutl' > $@
+
+$(DSTDIR)/Contents/MacOS/Muttlight\ Launcher.app: $(MUTTLIGHT_LAUNCHER) \
+    		$(DSTDIR)/Contents/MacOS
+	rm -rf "$@"
+	cp -r "$<" "$@"
 
 $(BUILD)/main.o: main.m $(BUILD)
 $(BUILD)/AppDelegate.o: AppDelegate.m $(BUILD)

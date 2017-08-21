@@ -10,6 +10,12 @@ registered via a graphical user interface, provides a Spotlight importer to
 extract meta data, integrates with Quick Look to provide previews and 
 thumbnails, and allows files to be opened directly in Mutt.
 
+Muttlight Launcher was created with Sveinbjörn Þórðarson's
+[Platypus](http://sveinbjorn.org/platypus) application. It responds to 
+‘open’ requests on MailDir messages by running a simple (naive) shell script 
+to launch an [Iterm2](https://www.iterm2.com) session, or failing that, a 
+native Terminal session, with Mutt open on the selected message.
+
 **This application is not yet production ready.**
 
 **Pull requests are welcome.**
@@ -21,12 +27,9 @@ thumbnails, and allows files to be opened directly in Mutt.
   example, problems finding `w3m` when previewing or opening mail files.
   Maybe include a special `muttrc` file inside the package?
 * More rigorous testing and error handling.
-* Reconfigure the GUI with a “Preferences” menu item that shows the window 
-  with the list of extensions. Do not display this window if Muttlight is 
-  launched to open a mail.
 * Setup the Preferences window so that its last location is remembered 
   properly.
-* Ensure that adding and removing extensions works correctly (may need to 
+* Ensure that adding and removing extensions works correctly.
   Must we retrigger an `mdimport`?
 
 Background
@@ -118,13 +121,9 @@ resemble the text-based display in the Mutt client. This style may even be
 preferable to some users. Rudimentary parsing is applied to colorize the 
 header fields, attachment status lines, and quoted replies.
 
-Finally, the Muttlight application fields ‘open’ requests from the Finder by 
-invoking a script to launch an [Iterm2](https://www.iterm2.com) session, or 
-failing that, a native Terminal session, with Mutt open on the selected 
-message.
-
-Altogether, these features allow a rapid configuration and natural 
-integration of MailDir contents into the MacOS user interface.
+Altogether, these features, together with the Muttlight Launcher, allow a 
+rapid configuration and natural integration of MailDir contents into the 
+MacOS user interface.
 
 ### Other Solutions
 

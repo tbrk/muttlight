@@ -34,6 +34,7 @@
 	<string>MainMenu</string>
 	<key>NSPrincipalClass</key>
 	<string>NSApplication</string>
+<!--
 	<key>CFBundleDocumentTypes</key>
 	<array>
 	  <dict>
@@ -49,6 +50,7 @@
 	    </array>
 	  </dict>
 	</array>
+  -->
 	<key>UTExportedTypeDeclarations</key>
 	<array>
 		<dict>
