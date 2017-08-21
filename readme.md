@@ -31,6 +31,7 @@ native Terminal session, with Mutt open on the selected message.
   properly.
 * Ensure that adding and removing extensions works correctly.
   Must we retrigger an `mdimport`?
+* Add a help file and screenshots.
 
 Background
 ----------
