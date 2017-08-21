@@ -23,43 +23,80 @@
 # the messages given as paths on the command-line.
 #
 
-MUTT=/usr/local/bin/mutt
+#
+# The script calls itself inside a login shell (/bin/bash -l) to ensure that
+# .profile, .bashrc, etcetera have all been sourced before exec-ing mutt:
+# The first call takes a single argument: a file path. It uses osascript to
+# invoke a terminal program with a login shell that executes itself with two
+# arguments: '-r' and the same file path. This second invocation runs mutt.
+# In principle, a single invocation with /bin/bash -l and mutt is possible,
+# but the quoting required for the arguments is tedious to get right.
+#
 
+MUTT=mutt # look in the path
+
+script="$0"
+fpath=
+runmutt=0
 while [ $# -gt 0 ]; do
-    fpath="$1"
+    arg="$1"
+
+    case $arg in
+	-r) runmutt=1 ;;
+	*)  fpath="$arg" ;;
+    esac
+    shift
+done
+
+if [ -z "$fpath" ]; then
+    printf "No filepath was given!\n" >&2
+    exit 1
+fi
+
+if [ ! -f "$fpath" ]; then
+    printf "No file at %s!\n" "$fpath" >&2
+    exit 2
+fi
+
+if [ $runmutt -eq 1 ]; then
     dpath=$(dirname "$fpath")
 
     case $(basename "$dpath") in
 	cur|new|tmp) dpath=$(dirname "$dpath") ;;
-	*) ;;
+	*)  printf "%s is not in a MailDir directory!\n" "$fpath" >&2
+	    exit 3
+	    ;;
     esac
-    dpath_escaped=$(echo "$dpath" | sed -e 's/ /\\\\ /g')
 
-    if [ -f "$fpath" ]; then
-	msgid=$(sed -ne 's/^[Mm][Ee][Ss][Ss][Aa][Gg][Ee]-[Ii][Dd]: *\([^ ]*\)/\1/p' "$fpath")
-	if [ "$msgid" ]; then
-	    # prefer iTerm2
-	    osascript 2>/dev/null <<EOF
+    msgid=$(sed -ne \
+	's/^[Mm][Ee][Ss][Ss][Aa][Gg][Ee]-[Ii][Dd]: *\([^ ]*\)/\1/p' \
+	"$fpath" | head -n 1)
+
+    if [ -z "$msgid" ]; then
+	printf "no message-id in %s\n" "$fpath" >&2
+	exit 4
+    fi
+
+    exec ${MUTT} -f "${dpath}" \
+	-e "push <limit>~i${msgid}<enter><limit>all<enter><display-message>" 
+else
+    script_escaped=$(echo "$script" | sed -e 's/ /\\\\ /g')
+    fpath_escaped=$(echo "$fpath" | sed -e 's/ /\\\\ /g')
+
+    # prefer iTerm2
+    osascript 2>/dev/null <<EOF
 tell application "iTerm2"
-    create window with default profile command "${MUTT} -f ${dpath_escaped} -e push\\\\ <limit>~i${msgid}<enter><limit>all<enter><display-message>"
+create window with default profile command "/bin/bash -l $script_escaped -r ${fpath_escaped}"
 end tell
 EOF
-	    if [ $? -ne 0 ]; then
-		# but accept Terminal otherwise
-		osascript <<EOF
+    if [ $? -ne 0 ]; then
+	# but accept Terminal otherwise
+	osascript <<EOF
 tell application "Terminal"
-    do script "${MUTT} -f '${dpath}' -e 'push <limit>~i${msgid}<enter><limit>all<enter><display-message>'"
+do script "/bin/bash -l $script_escaped -r ${fpath_escaped}"
 end tell
 tell application "Terminal" to activate
 EOF
-	    fi
-	else
-	    printf "no Message-Id in %s\n" "$fpath" >&2
-	fi
-    else
-	printf "cannot find %s\n" "$fpath" >&2
     fi
-
-    shift
-done
+fi
 
