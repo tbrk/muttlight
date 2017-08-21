@@ -1,6 +1,8 @@
 Muttlight
 =========
 
+![Muttlight Logo](src/Assets.xcassets/AppIcon.appiconset/icon_128x128.png)
+
 Muttlight is a MacOS application that improves search and preview for email 
 files stored in [MailDir](http://cr.yp.to/proto/maildir.html) format.
 Specifically, it allows the associated file extensions to be specified and 
