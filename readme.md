@@ -27,7 +27,6 @@ thumbnails, and allows files to be opened directly in Mutt.
 * Setup the Preferences window so that its last location is remembered 
   properly.
 * Ensure that adding and removing extensions works correctly (may need to 
-  launch `lsregister`? or `touch` the executable?).
   Must we retrigger an `mdimport`?
 
 Background

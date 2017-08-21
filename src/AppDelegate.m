@@ -179,6 +179,18 @@ BOOL updatePlistFilenameExtensions(NSURL *plistPath, NSArray *extensions)
     for (NSURL *url in plistURLs) {
         updatePlistFilenameExtensions(url, exts);
     }
+
+    // Reregister with LaunchServices (touch; lsregister)
+    NSFileManager *filemgr = [NSFileManager defaultManager];
+    NSURL *exe_url = [NSURL
+	    URLWithString: @"Contents/MacOS/Muttlight"
+	    relativeToURL:bundle_url];
+    [filemgr setAttributes: [NSDictionary
+				dictionaryWithObject: [NSDate date]
+					      forKey: NSFileModificationDate]
+	      ofItemAtPath: [exe_url path]
+		     error: nil];
+    LSRegisterURL((__bridge CFURLRef)bundle_url, true);
 }
 
 - (NSDictionary *)extensionsToDict {
