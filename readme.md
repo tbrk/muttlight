@@ -179,6 +179,13 @@ previewed as in the mutt pager. It will probably be necessary to
 before the search results are named correctly (the `mds` and `mds_stores` 
 processes become active during reindexing).
 
+The following command deletes and regenerates the Spotlight index on the 
+root volume (regeneration may take some time).
+
+```
+sudo mdutil -E /
+```
+
 Run the following command and search for `muttlight` to see registered file 
 extensions and plugin “claims”.
 
