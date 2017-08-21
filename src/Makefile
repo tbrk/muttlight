@@ -30,7 +30,7 @@ ACFLAGS+=--notices --warnings
 
 LSREGISTER:=/System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister
 
-MUTTLIGHT_LAUNCHER:=../Muttlight\ Launcher.app
+MUTTLIGHT_LAUNCHER:=../Muttlight\ Launcher.app.noindex
 
 EXECUTABLE_NAME:=Muttlight
 PRODUCT_BUNDLE_IDENTIFIER:=org.tbrk.muttlight
