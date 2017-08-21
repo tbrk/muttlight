@@ -199,6 +199,8 @@ BOOL updatePlistFilenameExtensions(NSURL *plistPath, NSArray *extensions)
 	      ofItemAtPath: [exe_url path]
 		     error: nil];
     LSRegisterURL((__bridge CFURLRef)bundle_url, true);
+
+    [[NSApplication sharedApplication] terminate:nil];
 }
 
 - (NSDictionary *)extensionsToDict {
