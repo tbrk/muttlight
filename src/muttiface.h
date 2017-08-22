@@ -31,7 +31,7 @@ int cat_mutt_message(char *msgpath, FILE *fout);
 struct mutt_to_html_args {
     int fdin;
     char *body_class;
-    dispatch_semaphore_t sync;
+    __unsafe_unretained dispatch_semaphore_t sync;
     CFDataRef dout;
 };
 

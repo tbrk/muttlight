@@ -1006,6 +1006,7 @@ int main(int argc, char **argv, char **environ)
 {
     dispatch_queue_t dqueue =
 	dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+    dispatch_semaphore_t sync_sem;
     int filedes[2];
     FILE *f;
     struct mutt_to_html_args args;
@@ -1058,8 +1059,9 @@ int main(int argc, char **argv, char **environ)
 	    exit(-3);
 	}
 
+	sync_sem = dispatch_semaphore_create(0);
 	args.fdin = filedes[0];
-	args.sync = dispatch_semaphore_create(0);
+	args.sync = sync_sem;
 	args.body_class = "preview";
 	dispatch_async_f(dqueue, &args, (dispatch_function_t)mutt_to_html);
 
@@ -1067,8 +1069,8 @@ int main(int argc, char **argv, char **environ)
 	cat_mutt_message(argv[0], f);
 	fclose(f);
 
-	dispatch_semaphore_wait(args.sync, DISPATCH_TIME_FOREVER);
-	dispatch_release(args.sync);
+	dispatch_semaphore_wait(sync_sem, DISPATCH_TIME_FOREVER);
+	dispatch_release(sync_sem);
 
 	if (args.dout) {
 	    fputs((const char *)CFDataGetBytePtr(args.dout), stdout);

@@ -32,6 +32,7 @@ GeneratePreviewForURL(void *thisInterface,
                       CFStringRef contentTypeUTI,
                       CFDictionaryRef options)
 {
+    dispatch_semaphore_t sync_sem;
     dispatch_queue_t dqueue =
 	dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
     int filedes[2];
@@ -55,7 +56,8 @@ GeneratePreviewForURL(void *thisInterface,
 
     if (pipe(filedes) < 0) return noErr;
     args.fdin = filedes[0];
-    args.sync = dispatch_semaphore_create(0);
+    sync_sem = dispatch_semaphore_create(0);
+    args.sync = sync_sem;
     args.body_class = "preview";
 
     dispatch_async_f(dqueue, &args, (dispatch_function_t)mutt_to_html);
@@ -64,8 +66,8 @@ GeneratePreviewForURL(void *thisInterface,
     cat_mutt_message(path, f);
     fclose(f);
 
-    dispatch_semaphore_wait(args.sync, DISPATCH_TIME_FOREVER);
-    dispatch_release(args.sync);
+    dispatch_semaphore_wait(sync_sem, DISPATCH_TIME_FOREVER);
+    dispatch_release(sync_sem);
 
     attachments = CFDictionaryCreateMutable(NULL, 0,
 	    &kCFCopyStringDictionaryKeyCallBacks,
