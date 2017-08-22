@@ -960,7 +960,6 @@ CFMutableDataRef mutt_message_text(char *msgpath, void **hdr)
 	fprintf(stderr, "failed to read message!\n");
 	exit(-2);
     }
-    mx_update_context(Context, 1);
 
     if ((msg = mx_open_message(Context, msgno)) == NULL)
 	return NULL;
