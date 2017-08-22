@@ -30,7 +30,7 @@ ACFLAGS+=--notices --warnings
 
 LSREGISTER:=/System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister
 
-MUTTLIGHT_LAUNCHER:=../Muttlight\ Launcher.app.noindex
+MUTTLIGHT_LAUNCHER:=../muttlight-launcher-app
 
 EXECUTABLE_NAME:=Muttlight
 PRODUCT_BUNDLE_IDENTIFIER:=org.tbrk.muttlight
@@ -150,9 +150,11 @@ $(DSTDIR)/Contents/PkgInfo:
 	printf 'APPLmutl' > $@
 
 $(DSTDIR)/Contents/MacOS/Muttlight\ Launcher.app: $(MUTTLIGHT_LAUNCHER) \
-    		$(DSTDIR)/Contents/MacOS
+	    $(DSTDIR)/Contents/Resources/AppIcon.icns $(DSTDIR)/Contents/MacOS
 	rm -rf "$@"
 	cp -r "$<" "$@"
+	cp $(DSTDIR)/Contents/Resources/AppIcon.icns \
+	   $(DSTDIR)/Contents/MacOS/Muttlight\ Launcher.app/Contents/Resources/appIcon.icns
 
 $(BUILD)/main.o: main.m $(BUILD)
 $(BUILD)/AppDelegate.o: AppDelegate.m $(BUILD)
