@@ -108,6 +108,9 @@ DeallocMetadataImporterPluginType(MetadataImporterPluginType *thisInstance)
 {
     CFUUIDRef theFactoryID;
 
+    /* Free global structures */
+    free_mutt_iface();
+
     theFactoryID = thisInstance->factoryID;
     free(thisInstance);
     if (theFactoryID){
