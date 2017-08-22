@@ -6,7 +6,9 @@ Muttlight design notes
 MailDir
 -------
 
-There are [six flags](http://cr.yp.to/proto/maildir.html):
+There are three subdirectories: `new`, `cur`, and `tmp`.
+
+Files in `cur` are named using [six flags](http://cr.yp.to/proto/maildir.html):
 
 * `D`: draft
 * `F`: flagged
@@ -51,6 +53,9 @@ Compile (`ocamlc -o gen gen.ml`), then run
 ```
 mdfind `./gen`
 ```
+
+Files in `new` (and `tmp`) are named without the version indicator (`2,`) or 
+an flags.
 
 [DoveCot](https://wiki2.dovecot.org/MailboxFormat/Maildir) uses an extension 
 of the basic MailDir scheme. Filenames are of the form:

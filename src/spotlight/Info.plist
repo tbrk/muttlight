@@ -84,6 +84,7 @@
 
 	<key>public.filename-extension</key>
 	<array>
+	  <string>mbox</string>
 	  <string>mbox:2,</string>
 	  <string>mbox:2,t</string>
 	  <string>mbox:2,s</string>

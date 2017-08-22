@@ -115,13 +115,15 @@ that are either present or absent (giving 64 different combinations). Since
 file extensions on MacOS begin with a `.`, it is also necessary to consider 
 the characters to the left of the suffix. They are sometimes `mbox`, but 
 more often they are (part of) the host name on which the file was originally 
-created (to ensure distinct names across multiple systems). Obviously, these 
-extensions will vary across installations. Muttlight provides a GUI that 
-searches the system for MailDir files, summarizes the extensions that are 
-being used, and allows users to select those which should be treated. Note 
-that the [DoveCot](https://wiki2.dovecot.org/MailboxFormat/Maildir) version 
-of the MailDir scheme cannot be handled since it embeds file size 
-information in the extension.
+created (to ensure distinct names across multiple systems). Files in the 
+`new` subdirectory are named without a `:2,DFPRST` suffix but usually 
+include a host name. Obviously, the host name extensions will vary across 
+installations. Muttlight provides a GUI that searches the system for MailDir 
+files, summarizes the extensions that are being used, and allows users to 
+select those which should be treated. Note that the 
+[DoveCot](https://wiki2.dovecot.org/MailboxFormat/Maildir) version of the 
+MailDir scheme cannot be handled since it embeds file size information in 
+the extension.
 
 Once the MailDir filename ‘extensions’ have been registered to the Muttlight 
 file type (`org.tbrk.muttlight.email`), the system will rely on Muttlight to 

@@ -42,12 +42,13 @@ NSArray * extensionsWithFlags(NSDictionary *extensions)
     }
 
     NSMutableArray *result = [NSMutableArray
-                              arrayWithCapacity: numEnabledExtensions * 64];
+                              arrayWithCapacity: numEnabledExtensions * 65];
 
     __block NSInteger i = 0;
     for (NSString *ext in extensions.keyEnumerator) {
         if ([extensions[ext] isEqualTo: @1]) {
             NSString *extWith2 = [ext stringByAppendingString: @":2,"];
+            result[i++] = ext;
             result[i++] = extWith2;
             generate(allflags, extWith2, ^(NSString *s) { result[i++] = s; });
         }
