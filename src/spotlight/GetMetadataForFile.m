@@ -99,7 +99,7 @@ Boolean GetMetadataForFile(void *thisInterface,
 	char *cpath = safe_strdup(
 		[path cStringUsingEncoding: NSUTF8StringEncoding]);
 
-	text = (__bridge NSMutableData *)
+	text = (__bridge_transfer NSMutableData *)
 		    mutt_message_text(cpath, (void **)&hdr);
 	FREE(&cpath);
 	SETDATA(kMDItemTextContent,

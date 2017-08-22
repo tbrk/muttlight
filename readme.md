@@ -22,6 +22,7 @@ native Terminal session, with Mutt open on the selected message.
 
 ## TODO
 
+* Find the cause of segmentation faults in the Spotlight importer.
 * More rigorous testing and error handling.
 * Ensure that adding and removing extensions works correctly.
   Must we retrigger an `mdimport`?

@@ -145,7 +145,7 @@ static void free_context(CONTEXT **pctx)
     mutt_clear_threads(ctx);
 
     for (i = 0; i < ctx->msgcount; i++)
-	mutt_free_header (&ctx->hdrs[i]);
+	mutt_free_header(&(ctx->hdrs[i]));
 
     FREE (&ctx->hdrs);
     FREE (&ctx->v2r);
@@ -294,7 +294,7 @@ static int read_message(CONTEXT *ctx, char *subdir, char *msgname)
 static void free_message(CONTEXT *ctx)
 {
     if (ctx->msgcount > 0)
-	mutt_free_header(&ctx->hdrs[--ctx->msgcount]);
+	mutt_free_header(&(ctx->hdrs[--ctx->msgcount]));
 }
 
 #define HTML_START \
