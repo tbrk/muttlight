@@ -92,13 +92,12 @@ package: $(DSTDIR)/Contents/MacOS/Muttlight \
 	 $(DSTDIR)/Contents/Info.plist \
 	 $(DSTDIR)/Contents/PkgInfo \
 	 $(DSTDIR)/Contents/MacOS/Muttlight\ Launcher.app
-	touch $(DSTDIR)/Contents/MacOS/Muttlight
-	#$(LSREGISTER) -f $(DSTDIR)
+	@touch $(DSTDIR)/Contents/MacOS/Muttlight
 
-$(BUILD)/fwrapdata.o: fwrapdata.c fwrapdata.h $(BUILD)
+$(BUILD)/fwrapdata.o: fwrapdata.c fwrapdata.h | $(BUILD)
 	$(CC) -c $< -o $@ $(MACOSX)
 
-$(BUILD)/entities.o: entities.c entities.h $(BUILD)
+$(BUILD)/entities.o: entities.c entities.h | $(BUILD)
 	$(CC) -c $< -o $@ $(MACOSX)
 
 # main app and user interface
@@ -106,13 +105,14 @@ $(BUILD)/entities.o: entities.c entities.h $(BUILD)
 MUTTLIGHT_OBJS:=$(BUILD)/AppDelegate.o \
     		$(BUILD)/main.o
 
-$(DSTDIR)/Contents/MacOS/Muttlight: $(MUTTLIGHT_OBJS) $(DSTDIR)/Contents/MacOS
+$(DSTDIR)/Contents/MacOS/Muttlight: $(MUTTLIGHT_OBJS) \
+    		| $(DSTDIR)/Contents/MacOS
 	MACOSX_DEPLOYMENT_TARGET=$(MACOSX_DEPLOYMENT_TARGET) \
 	$(CC) -fobjc-arc -arch $(ARCH) $(CFLAGS) $(MACOSX) \
 		$(CC_LDFLAGS) -framework Cocoa $(MUTTLIGHT_OBJS) -o $@
 
 $(DSTDIR)/Contents/Resources/Base.lproj/MainMenu.nib: Base.lproj/MainMenu.xib \
-    	$(DSTDIR)/Contents/Resources/Base.lproj
+    		| $(DSTDIR)/Contents/Resources/Base.lproj
 	XCODE_DEVELOPER_USR_PATH=$(XCODE_DEVELOPER_PATH)/usr \
 	$(IBTOOL) $(IBFLAGS) \
 	    --target-device mac \
@@ -135,7 +135,7 @@ $(DSTDIR)/Contents/Resources/AppIcon.icns: Assets.xcassets
 	    --product-type com.apple.product-type.application \
 	    --compile $(DSTDIR)/Contents/Resources $<
 
-$(DSTDIR)/Contents/Info.plist: Info.plist $(DSTDIR)/Contents
+$(DSTDIR)/Contents/Info.plist: Info.plist | $(DSTDIR)/Contents
 	sed \
 	  -e 's/$$(EXECUTABLE_NAME)/$(EXECUTABLE_NAME)/g' \
 	  -e 's/$$(PRODUCT_BUNDLE_IDENTIFIER)/$(PRODUCT_BUNDLE_IDENTIFIER)/g' \
@@ -150,14 +150,15 @@ $(DSTDIR)/Contents/PkgInfo:
 	printf 'APPLmutl' > $@
 
 $(DSTDIR)/Contents/MacOS/Muttlight\ Launcher.app: $(MUTTLIGHT_LAUNCHER) \
-	    $(DSTDIR)/Contents/Resources/AppIcon.icns $(DSTDIR)/Contents/MacOS
+	    	$(DSTDIR)/Contents/Resources/AppIcon.icns \
+		| $(DSTDIR)/Contents/MacOS
 	rm -rf "$@"
 	cp -r "$<" "$@"
 	cp $(DSTDIR)/Contents/Resources/AppIcon.icns \
 	   $(DSTDIR)/Contents/MacOS/Muttlight\ Launcher.app/Contents/Resources/appIcon.icns
 
-$(BUILD)/main.o: main.m $(BUILD)
-$(BUILD)/AppDelegate.o: AppDelegate.m $(BUILD)
+$(BUILD)/main.o: main.m | $(BUILD)
+$(BUILD)/AppDelegate.o: AppDelegate.m | $(BUILD)
 
 # Mutt objects
 
@@ -182,10 +183,10 @@ QUICKLOOK_OBJS:=$(BUILD)/GenerateThumbnailForURL.o \
 qlpackage: $(QL_DSTDIR)/Contents/MacOS/muttlight-quicklook \
 	   $(QL_DSTDIR)/Contents/Info.plist \
 	   $(QL_DSTDIR)/Contents/Resources/email.css
-	touch $(QL_DSTDIR)/Contents/MacOS/muttlight-quicklook
+	@touch $(QL_DSTDIR)/Contents/MacOS/muttlight-quicklook
 
 $(QL_DSTDIR)/Contents/MacOS/muttlight-quicklook: $(QUICKLOOK_OBJS) \
-		$(QL_DSTDIR)/Contents/MacOS
+		| $(QL_DSTDIR)/Contents/MacOS
 	MACOSX_DEPLOYMENT_TARGET=$(MACOSX_DEPLOYMENT_TARGET) \
 	$(CC) -bundle -arch $(ARCH) $(CFLAGS) $(MACOSX) \
 		$(CC_LDFLAGS) $(QUICKLOOK_OBJS) \
@@ -193,7 +194,8 @@ $(QL_DSTDIR)/Contents/MacOS/muttlight-quicklook: $(QUICKLOOK_OBJS) \
 		-framework CoreServices -framework QuickLook \
 		-o $@
 
-$(QL_DSTDIR)/Contents/Info.plist: $(QL)/Info.plist $(QL_DSTDIR)/Contents
+$(QL_DSTDIR)/Contents/Info.plist: $(QL)/Info.plist \
+    		| $(QL_DSTDIR)/Contents
 	sed \
 	  -e 's/$$(EXECUTABLE_NAME)/$(QL_EXECUTABLE_NAME)/g' \
 	  -e 's/$$(PRODUCT_BUNDLE_IDENTIFIER)/$(QL_PRODUCT_BUNDLE_IDENTIFIER)/g' \
@@ -205,7 +207,7 @@ $(QL_DSTDIR)/Contents/Info.plist: $(QL)/Info.plist $(QL_DSTDIR)/Contents
 	  $< >$@
 
 $(QL_DSTDIR)/Contents/Resources/email.css: $(QL)/email.css \
-	    $(QL_DSTDIR)/Contents/Resources
+	    	| $(QL_DSTDIR)/Contents/Resources
 	cp $< $@
 
 # for testing
@@ -216,19 +218,19 @@ $(BUILD)/muttiface: muttiface.c muttiface.h $(BUILD)/mutt.o \
 	    -Wl,-dead_strip $(MUTT_LIBS) -lncurses \
 	    -framework CoreFoundation
 
-$(BUILD)/GenerateThumbnailForURL.o: $(QL)/GenerateThumbnailForURL.c $(BUILD)
-$(BUILD)/GeneratePreviewForURL.o: $(QL)/GeneratePreviewForURL.c $(BUILD)
+$(BUILD)/GenerateThumbnailForURL.o: $(QL)/GenerateThumbnailForURL.c | $(BUILD)
+$(BUILD)/GeneratePreviewForURL.o: $(QL)/GeneratePreviewForURL.c | $(BUILD)
 $(BUILD)/muttiface.o: CINCLUDE += -I $(MUTT_SRC) -I $(ULOCAL)/include
-$(BUILD)/muttiface.o: muttiface.c muttiface.h $(BUILD)
-$(BUILD)/qlmain.o: $(QL)/qlmain.c $(BUILD)
+$(BUILD)/muttiface.o: muttiface.c muttiface.h | $(BUILD)
+$(BUILD)/qlmain.o: $(QL)/qlmain.c | $(BUILD)
 
-$(QL_DSTDIR): $(DSTDIR)/Contents/Library
+$(QL_DSTDIR): | $(DSTDIR)/Contents/Library
 	mkdir -p $@
-$(QL_DSTDIR)/Contents: $(QL_DSTDIR)
+$(QL_DSTDIR)/Contents: | $(QL_DSTDIR)
 	mkdir -p $@
-$(QL_DSTDIR)/Contents/Resources: $(QL_DSTDIR)/Contents
+$(QL_DSTDIR)/Contents/Resources: | $(QL_DSTDIR)/Contents
 	mkdir -p $@
-$(QL_DSTDIR)/Contents/MacOS: $(QL_DSTDIR)/Contents
+$(QL_DSTDIR)/Contents/MacOS: | $(QL_DSTDIR)/Contents
 	mkdir -p $@
 
 ## Spotlight plugin
@@ -245,10 +247,11 @@ SPOTLIGHT_OBJS:=$(BUILD)/GetMetadataForFile.o \
 
 slpackage: $(SL_DSTDIR)/Contents/MacOS/muttlight-spotlight \
 	   $(SL_DSTDIR)/Contents/Info.plist
-	touch $(SL_DSTDIR)/Contents/MacOS/muttlight-spotlight
+	@touch $(SL_DSTDIR)/Contents/MacOS/muttlight-spotlight
 
 $(SL_DSTDIR)/Contents/MacOS/muttlight-spotlight: $(SPOTLIGHT_OBJS) \
-    		$(BUILD)/mutt.o $(SL_DSTDIR)/Contents/MacOS
+    		$(BUILD)/mutt.o \
+		| $(SL_DSTDIR)/Contents/MacOS
 	MACOSX_DEPLOYMENT_TARGET=$(MACOSX_DEPLOYMENT_TARGET) \
 	$(CC) -fobjc-arc -bundle -arch $(ARCH) $(CFLAGS) $(MACOSX) \
 		$(CC_LDFLAGS) $(SPOTLIGHT_OBJS) \
@@ -256,7 +259,8 @@ $(SL_DSTDIR)/Contents/MacOS/muttlight-spotlight: $(SPOTLIGHT_OBJS) \
 		-framework CoreServices \
 		-o $@
 
-$(SL_DSTDIR)/Contents/Info.plist: $(SL)/Info.plist $(SL_DSTDIR)/Contents
+$(SL_DSTDIR)/Contents/Info.plist: $(SL)/Info.plist \
+    		| $(SL_DSTDIR)/Contents
 	sed \
 	  -e 's/$$(EXECUTABLE_NAME)/$(SL_EXECUTABLE_NAME)/g' \
 	  -e 's/$$(PRODUCT_BUNDLE_IDENTIFIER)/$(SL_PRODUCT_BUNDLE_IDENTIFIER)/g' \
@@ -268,16 +272,16 @@ $(SL_DSTDIR)/Contents/Info.plist: $(SL)/Info.plist $(SL_DSTDIR)/Contents
 	  $< >$@
 
 $(BUILD)/GetMetadataForFile.o: CINCLUDE += -I $(MUTT_SRC) -I $(ULOCAL)/include
-$(BUILD)/GetMetadataForFile.o: $(SL)/GetMetadataForFile.m $(BUILD)
-$(BUILD)/slmain.o: $(SL)/slmain.c $(BUILD)
+$(BUILD)/GetMetadataForFile.o: $(SL)/GetMetadataForFile.m | $(BUILD)
+$(BUILD)/slmain.o: $(SL)/slmain.c | $(BUILD)
 
-$(SL_DSTDIR): $(DSTDIR)/Contents/Library
+$(SL_DSTDIR): | $(DSTDIR)/Contents/Library
 	mkdir -p $@
-$(SL_DSTDIR)/Contents: $(SL_DSTDIR)
+$(SL_DSTDIR)/Contents: | $(SL_DSTDIR)
 	mkdir -p $@
-$(SL_DSTDIR)/Contents/Resources: $(SL_DSTDIR)/Contents
+$(SL_DSTDIR)/Contents/Resources: | $(SL_DSTDIR)/Contents
 	mkdir -p $@
-$(SL_DSTDIR)/Contents/MacOS: $(SL_DSTDIR)/Contents
+$(SL_DSTDIR)/Contents/MacOS: | $(SL_DSTDIR)/Contents
 	mkdir -p $@
 
 ## Directories
@@ -286,15 +290,15 @@ $(BUILD):
 	mkdir -p $@
 $(DSTDIR):
 	mkdir -p $@
-$(DSTDIR)/Contents: $(DSTDIR)
+$(DSTDIR)/Contents: | $(DSTDIR)
 	mkdir -p $@
-$(DSTDIR)/Contents/MacOS: $(DSTDIR)/Contents
+$(DSTDIR)/Contents/MacOS: | $(DSTDIR)/Contents
 	mkdir -p $@
-$(DSTDIR)/Contents/Library: $(DSTDIR)/Contents
+$(DSTDIR)/Contents/Library: | $(DSTDIR)/Contents
 	mkdir -p $@
-$(DSTDIR)/Contents/Resources: $(DSTDIR)/Contents
+$(DSTDIR)/Contents/Resources: | $(DSTDIR)/Contents
 	mkdir -p $@
-$(DSTDIR)/Contents/Resources/Base.lproj: $(DSTDIR)/Contents/Resources
+$(DSTDIR)/Contents/Resources/Base.lproj: | $(DSTDIR)/Contents/Resources
 	mkdir -p $@
 
 ## Administration
