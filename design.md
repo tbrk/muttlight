@@ -493,11 +493,3 @@ Need to learn basic Mac GUI concepts:
 * [Rows with checkboxes](https://stackoverflow.com/a/10817372)
 * [Building from the commandline](https://developer.apple.com/library/content/technotes/tn2339/_index.html)
 
-Installation Requirements
--------------------------
-
-- mutt source code
-- libintl (brew install gettext)
-  or configure mutt with `--disable-nls` (not yet tested)
-- ncurses
-

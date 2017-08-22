@@ -4,7 +4,7 @@ include config
 
 ARCH:=x86_64
 BUILD:=build
-MACOSX_DEPLOYMENT_TARGET:=10.8
+MACOSX_DEPLOYMENT_TARGET:=10.7
 BUILD_MACHINE_OS_BUILD:=$(shell sw_vers -buildVersion)
 
 CC:=$(XCODE_DEVELOPER_PATH)/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang

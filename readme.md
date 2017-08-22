@@ -22,13 +22,38 @@ native Terminal session, with Mutt open on the selected message.
 
 ## TODO
 
-* Improve and document the build system (including Mutt source).
 * More rigorous testing and error handling.
-* Setup the Preferences window so that its last location is remembered 
-  properly.
 * Ensure that adding and removing extensions works correctly.
   Must we retrigger an `mdimport`?
 * Add a help file and screenshots.
+
+## Building Muttlight
+
+1. Install prerequisites
+```
+brew install gettext
+brew install ncurses
+```
+
+2. Clone (or link) the Mutt source code into a `src/mutt` subdirectory
+```
+wget -qO- ftp://ftp.mutt.org/pub/mutt/mutt-1.8.3.tar.gz \
+  | tar xvz -C ./src/mutt && ln -s mutt-1.8.3 src/mutt
+```
+
+3. Build Mutt
+```
+(cd src/mutt && ./configure && make)
+```
+
+4. Build Muttlight
+```
+cd src
+make
+```
+
+Install Muttlight simply by copying the Muttlight.app bundle (directory) to 
+`$HOME/Applications`.
 
 Background
 ----------
