@@ -39,7 +39,7 @@ brew install ncurses
 2. Clone (or link) the Mutt source code into a `src/mutt` subdirectory
 ```
 wget -qO- ftp://ftp.mutt.org/pub/mutt/mutt-1.8.3.tar.gz \
-  | tar xvz -C ./src/mutt && ln -s mutt-1.8.3 src/mutt
+  | tar xvz -C ./src && ln -s mutt-1.8.3 src/mutt
 ```
 
 3. Build Mutt
