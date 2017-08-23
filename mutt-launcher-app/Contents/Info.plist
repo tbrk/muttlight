@@ -18,15 +18,15 @@
 		</dict>
 	</array>
 	<key>CFBundleExecutable</key>
-	<string>Muttlight Launcher</string>
+	<string>Mutt Launcher</string>
 	<key>CFBundleIconFile</key>
 	<string>appIcon.icns</string>
 	<key>CFBundleIdentifier</key>
-	<string>org.tbrk.muttlight-launcher</string>
+	<string>org.tbrk.mutt-launcher</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
-	<string>Muttlight Launcher</string>
+	<string>Mutt Launcher</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>

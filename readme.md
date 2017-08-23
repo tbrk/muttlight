@@ -147,8 +147,8 @@ resemble the text-based display in the Mutt client. This style may even be
 preferable to some users. Rudimentary parsing is applied to colorize the 
 header fields, attachment status lines, and quoted replies.
 
-Altogether, these features, together with the Muttlight Launcher, allow a 
-rapid configuration and natural integration of MailDir contents into the 
+Altogether, these features, together with the Mutt Launcher component, allow 
+a rapid configuration and natural integration of MailDir contents into the 
 MacOS user interface.
 
 ### Other Solutions

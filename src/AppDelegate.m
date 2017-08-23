@@ -128,7 +128,7 @@ BOOL updatePlistFilenameExtensions(NSURL *plistPath, NSArray *extensions)
 	NSBundle *bundle = [NSBundle bundleWithIdentifier: MUTTLIGHT_KEY];
 	NSURL *bundle_url = [bundle bundleURL];
 	NSURL *launcher_url = [NSURL
-		URLWithString: @"Contents/MacOS/Muttlight Launcher.app"
+		URLWithString: @"Contents/MacOS/Mutt Launcher.app"
 		relativeToURL:bundle_url];
 	LSRegisterURL((__bridge CFURLRef)launcher_url, false);
     }
