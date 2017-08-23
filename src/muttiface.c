@@ -42,6 +42,8 @@
 #include <libgen.h>	// dirname, basename
 #include <unistd.h>	// fork, getopt
 #include <string.h>	// strspn, strcspn
+#include <locale.h>	// setlocale
+#include <ctype.h>	// isspace
 
 #include "fwrapdata.h"
 #include "entities.h"
@@ -692,9 +694,8 @@ static void external_body_handler(BODY *a, STATE *s)
 static void message_handler(BODY *a, STATE *s)
 {
     BODY *b;
-    LOFF_T off_start;
 
-    off_start = ftello(s->fpin);
+    ftello(s->fpin);
     if (a->encoding == ENCBASE64
 	|| a->encoding == ENCQUOTEDPRINTABLE
 	|| a->encoding == ENCUUENCODED)
@@ -884,21 +885,21 @@ run_decode_and_handler(BODY *b, STATE *s, handler_t handler, int plaintext)
     if (handler)
     {
 	handler(b, s);
-
-	if (decode)
-	{
-	    b->length = tmplength;
-	    b->offset = tmpoffset;
-
-	    /* restore the original source stream */
-	    safe_fclose (&s->fpin);
-	    s->fpin = fp;
-	}
     } else if (b->filename) {
 	// no handler for part, so just include its filename
 	fputc(' ', s->fpout);
 	fputs(b->filename, s->fpout);
 	fputc('\n', s->fpout);
+    }
+
+    if (decode)
+    {
+	b->length = tmplength;
+	b->offset = tmpoffset;
+
+	/* restore the original source stream */
+	safe_fclose (&s->fpin);
+	s->fpin = fp;
     }
 }
 
