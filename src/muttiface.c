@@ -597,14 +597,28 @@ typedef void (*handler_t) (BODY *, STATE *);
 
 static void body_handler(BODY *b, STATE *s);
 
+#define WORD_TOO_BIG 50
+
 static void text_plain_handler(BODY *b, STATE *s)
 {
-    char *buf = NULL;
+    char *buf = NULL, *cur = NULL;
+    int toobig = 1;
     size_t sz = 0;
 
     while ((buf = mutt_read_line(buf, &sz, s->fpin, NULL, 0)))
     {
-	state_puts(buf, s);
+	for (cur = buf; *cur; ++cur) {
+	    if (isspace(*cur)) {
+		toobig = 0;
+		break;
+	    }
+	}
+
+	// skip long lines that contain no spaces
+	// (no point indexing misinterpreted data)
+	if (!toobig || sz < WORD_TOO_BIG)
+	    state_puts(buf, s);
+
 	state_putc('\n', s);
     }
 
@@ -619,6 +633,7 @@ static void text_html_handler(BODY *b, STATE *s)
     int intag = 0, skipws = 1;
     int cur_is_space;
     char entity[8];
+    int wordsize = 0; // skip long sequences without spaces
 
     // rough-and-ready tag skipping and entity conversion
     while ((buf = mutt_read_line(buf, &sz, s->fpin, NULL, MUTT_EOL)))
@@ -648,10 +663,14 @@ static void text_html_handler(BODY *b, STATE *s)
 			cur++;
 		    }
 		} else {
+		    if (++wordsize >= WORD_TOO_BIG) break;
 		    state_putc(*cur, s);
 		    cur++;
 		}
-		skipws = cur_is_space;
+		if (cur_is_space) {
+		    skipws = 0;
+		    wordsize= 0;
+		}
 	    }
 	}
     }
