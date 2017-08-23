@@ -162,7 +162,7 @@ $(BUILD)/AppDelegate.o: AppDelegate.m | $(BUILD)
 
 # Mutt objects
 
-$(BUILD)/mutt.o:
+$(BUILD)/mutt.o: | $(BUILD)
 	$(LD) -r $(am_mutt_OBJECTS:%=$(MUTT_SRC)/%)  \
 	      	 $(MUTT_LIB_OBJECTS:%=$(MUTT_SRC)/%) \
 	      -o $@
