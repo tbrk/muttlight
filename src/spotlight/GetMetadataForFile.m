@@ -28,11 +28,94 @@
 #include "charset.h"
 #include "rfc2047.h"
 
-static NSString *str(const char *s)
+// From: https://stackoverflow.com/a/30392716 (L.J. Wubbe)
+static NSString *dataToUTF8String(NSData *data)
 {
-    return [[NSString alloc] initWithCString: s
-				    encoding: NSUTF8StringEncoding];
+    // First try to do the 'standard' UTF-8 conversion
+    NSString * bufferStr = [[NSString alloc] initWithData:data
+                                                 encoding:NSUTF8StringEncoding];
+
+    // if it fails, do the 'lossy' UTF8 conversion
+    if (!bufferStr) {
+        const Byte * buffer = [data bytes];
+
+        NSMutableString * filteredString = [[NSMutableString alloc] init];
+
+        int i = 0;
+        while (i < [data length]) {
+
+            int expectedLength = 1;
+
+            if      ((buffer[i] & 0b10000000) == 0b00000000) expectedLength = 1;
+            else if ((buffer[i] & 0b11100000) == 0b11000000) expectedLength = 2;
+            else if ((buffer[i] & 0b11110000) == 0b11100000) expectedLength = 3;
+            else if ((buffer[i] & 0b11111000) == 0b11110000) expectedLength = 4;
+            else if ((buffer[i] & 0b11111100) == 0b11111000) expectedLength = 5;
+            else if ((buffer[i] & 0b11111110) == 0b11111100) expectedLength = 6;
+
+            int length = MIN(expectedLength, [data length] - i);
+            NSData * character = [NSData dataWithBytes:&buffer[i] length:(sizeof(Byte) * length)];
+
+            NSString * possibleString = [NSString stringWithUTF8String:[character bytes]];
+            if (possibleString) {
+                [filteredString appendString:possibleString];
+            }
+            i = i + expectedLength;
+        }
+        bufferStr = filteredString;
+    }
+
+    return bufferStr;
 }
+
+static int length_or_remaining(int length, const char* buf)
+{
+    int i;
+
+    for (i=0; i < length; ++i) {
+	if (!buf[i])
+	    return i;
+    }
+
+    return length;
+}
+
+static NSString *str(const char *data)
+{
+    // First try to do the 'standard' UTF-8 conversion
+    NSString *bufferStr = [NSString stringWithUTF8String: data];
+
+    // if it fails, do the 'lossy' UTF8 conversion
+    if (!bufferStr) {
+        NSMutableString * filteredString = [[NSMutableString alloc] init];
+
+        while (*data) {
+
+            int expectedLength = 1;
+
+            if      ((*data & 0b10000000) == 0b00000000) expectedLength = 1;
+            else if ((*data & 0b11100000) == 0b11000000) expectedLength = 2;
+            else if ((*data & 0b11110000) == 0b11100000) expectedLength = 3;
+            else if ((*data & 0b11111000) == 0b11110000) expectedLength = 4;
+            else if ((*data & 0b11111100) == 0b11111000) expectedLength = 5;
+            else if ((*data & 0b11111110) == 0b11111100) expectedLength = 6;
+
+            int length = length_or_remaining(expectedLength, data);
+            NSData *character = [NSData dataWithBytes:data length:length];
+
+            NSString *possibleString = [NSString
+				    stringWithUTF8String:[character bytes]];
+            if (possibleString) {
+                [filteredString appendString:possibleString];
+            }
+	    data += expectedLength;
+        }
+        bufferStr = filteredString;
+    }
+
+    return bufferStr;
+}
+
 
 void add_addresses(ADDRESS *addr,
 		   NSMutableArray *names,
@@ -52,10 +135,8 @@ void add_addresses(ADDRESS *addr,
     }
 }
 
-#define SETDATA(k, v) [(__bridge NSMutableDictionary *)data \
-			    setObject: v forKey: (__bridge NSString *)k]
-#define SETSDATA(k, v) [(__bridge NSMutableDictionary *)data \
-			    setObject: v forKey: k]
+#define SETDATA(k, v)  [dict setObject: v forKey: (__bridge NSString *)k]
+#define SETSDATA(k, v) [dict setObject: v forKey: k]
 
 #define MAILDIR_FLAG_MATCH @".*:2,(D?)(F?)(P?)(R?)(S?)(T?)$"
 #define FLAG_MATCH_D 1
@@ -82,6 +163,7 @@ Boolean GetMetadataForFile(void *thisInterface,
     
     @autoreleasepool {
 
+    NSMutableDictionary *dict = (__bridge NSMutableDictionary *)data;
     NSString *path = (__bridge NSString *)pathToFile;
     NSError *error = nil;
 
@@ -93,18 +175,19 @@ Boolean GetMetadataForFile(void *thisInterface,
     if ([(__bridge NSString *)contentTypeUTI
 	    isEqualToString:@"org.tbrk.muttlight.email"])
     {
-	HEADER *hdr;
+	HEADER *hdr = NULL;
 	ENVELOPE *headers = NULL;
-	NSMutableData *text;
+	NSMutableData *textdata = nil;
 	char *cpath = safe_strdup(
 		[path cStringUsingEncoding: NSUTF8StringEncoding]);
 
-	text = (__bridge_transfer NSMutableData *)
+	SETDATA(kMDItemKind, @"Mail Message");
+
+	textdata = (__bridge_transfer NSMutableData *)
 		    mutt_message_text(cpath, (void **)&hdr);
 	FREE(&cpath);
-	SETDATA(kMDItemTextContent,
-		[[NSString alloc] initWithData:text
-				      encoding:NSUTF8StringEncoding]);
+
+	SETDATA(kMDItemTextContent, dataToUTF8String(textdata));
 	headers = hdr->env;
 
 	if (headers != NULL) {
@@ -116,13 +199,11 @@ Boolean GetMetadataForFile(void *thisInterface,
 
 	    ok = TRUE;
 
-	    SETDATA(kMDItemKind, @"Mail Message");
 	    if (headers->message_id)
 		SETDATA(kMDItemIdentifier, str(headers->message_id));
 
 	    if (headers->subject) {
-		NSString *subject;
-		rfc2047_decode(&headers->subject);
+		NSString *subject = NULL;
 		subject = str(headers->subject);
 		SETDATA(kMDItemDisplayName, subject);
 		SETDATA(kMDItemSubject, subject);
