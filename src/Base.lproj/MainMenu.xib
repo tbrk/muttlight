@@ -414,6 +414,11 @@ Gw
                                 <progressIndicator wantsLayer="YES" horizontalHuggingPriority="750" verticalHuggingPriority="750" maxValue="100" displayedWhenStopped="NO" bezeled="NO" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="Acq-V5-fdm">
                                     <rect key="frame" x="107" y="21" width="16" height="16"/>
                                     <connections>
+                                        <binding destination="Voe-Tx-rLC" name="hidden" keyPath="isSearching" id="d3C-vb-hzk">
+                                            <dictionary key="options">
+                                                <string key="NSValueTransformerName">NSNegateBoolean</string>
+                                            </dictionary>
+                                        </binding>
                                         <binding destination="Voe-Tx-rLC" name="animate" keyPath="isSearching" id="jXS-Cj-57U"/>
                                     </connections>
                                 </progressIndicator>
@@ -442,6 +447,22 @@ Gw
                                         </binding>
                                     </connections>
                                 </textField>
+                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="xZP-on-EJi">
+                                    <rect key="frame" x="366" y="22" width="174" height="14"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Dovecot files are ignored." id="N19-XG-xxD">
+                                        <font key="font" metaFont="smallSystem"/>
+                                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                    </textFieldCell>
+                                    <connections>
+                                        <binding destination="Voe-Tx-rLC" name="hidden" keyPath="hasDovecot" id="YbZ-r2-82f">
+                                            <dictionary key="options">
+                                                <string key="NSValueTransformerName">NSNegateBoolean</string>
+                                            </dictionary>
+                                        </binding>
+                                    </connections>
+                                </textField>
                                 <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="imh-EQ-GZN">
                                     <rect key="frame" x="49" y="19" width="21" height="21"/>
                                     <constraints>
@@ -456,6 +477,18 @@ Gw
                                         <binding destination="j96-Ih-y33" name="enabled" keyPath="selectedObjects.@count" id="PHZ-sU-Lue"/>
                                     </connections>
                                 </button>
+                                <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="uO5-I0-CZi">
+                                    <rect key="frame" x="344" y="22" width="16" height="16"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                    <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="NSCaution" id="dLt-mR-4rp"/>
+                                    <connections>
+                                        <binding destination="Voe-Tx-rLC" name="hidden" keyPath="hasDovecot" id="kkm-E8-Q8M">
+                                            <dictionary key="options">
+                                                <string key="NSValueTransformerName">NSNegateBoolean</string>
+                                            </dictionary>
+                                        </binding>
+                                    </connections>
+                                </imageView>
                             </subviews>
                             <constraints>
                                 <constraint firstItem="NHw-2q-Wh4" firstAttribute="trailing" secondItem="hcM-rX-eir" secondAttribute="trailing" id="55Q-mN-YWG"/>
@@ -515,6 +548,7 @@ Gw
     <resources>
         <image name="NSAddTemplate" width="11" height="11"/>
         <image name="NSApplicationIcon" width="128" height="128"/>
+        <image name="NSCaution" width="32" height="32"/>
         <image name="NSRemoveTemplate" width="11" height="11"/>
     </resources>
 </document>

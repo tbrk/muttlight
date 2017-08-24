@@ -31,7 +31,6 @@
 
 - (NSArray *)sortByExtension;
 
-// TODO: show a warning with link to a help file when true
 @property BOOL hasDovecot;
 
 @end

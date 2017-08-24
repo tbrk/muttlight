@@ -109,7 +109,6 @@ BOOL updatePlistFilenameExtensions(NSURL *plistPath, NSArray *extensions)
     if ((self = [super init])) {
         NSError *error = nil;
 
-        self.hasDovecot = NO;
         self.extensions = [NSMutableArray array];
 
         self.regex_maildir =
@@ -145,6 +144,8 @@ BOOL updatePlistFilenameExtensions(NSURL *plistPath, NSArray *extensions)
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     NSDictionary *exts = [prefs dictionaryForKey: @"extensions"];
+
+    self.hasDovecot = NO;
 
     if (exts == nil) {
 	exts = @{ @"mbox" : @YES };
@@ -280,7 +281,9 @@ BOOL updatePlistFilenameExtensions(NSURL *plistPath, NSArray *extensions)
              options: 0
              range: NSMakeRange(0, [result length])] > 0)
         {
-            self.hasDovecot = YES;
+            [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+		self.hasDovecot = YES;
+            }];
 
         } else if (![self.alreadyFound member: result]) {
             [[NSOperationQueue mainQueue] addOperationWithBlock:^{
