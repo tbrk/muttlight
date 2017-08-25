@@ -73,7 +73,7 @@ It may be easy to adapt the application to work with
 [MH](https://en.wikipedia.org/wiki/MH_Message_Handling_System).
 
 Spotlight
-=========
+---------
 
 [Notes on spotlight](http://osxnotes.net/spotlight.html)
 
@@ -263,7 +263,7 @@ this.
    implemented in the current version.
 
 Quick Look
-==========
+----------
 
 There are several existing open-source "Quick Look Plugins":
 
@@ -497,4 +497,73 @@ Need to learn basic Mac GUI concepts:
 * [Preferences pane](https://developer.apple.com/library/content/documentation/UserExperience/Conceptual/PreferencePanes/Tasks/Creation.html)
 * [Rows with checkboxes](https://stackoverflow.com/a/10817372)
 * [Building from the commandline](https://developer.apple.com/library/content/technotes/tn2339/_index.html)
+
+Exploiting existing Apple plugins
+=================================
+
+MacOS already includes the following applications and plugins
+```
+/Applications/Mail.app
+/System/Library/Spotlight/Mail.mdimporter
+/System/Library/QuickLook/Mail.qlgenerator
+```
+
+Why not try to exploit them directly to minimize programming and give better 
+results?
+
+It seems that the following steps would be necessary.
+
+1. In `/Applications/Mail.app/Contents/Info.plist`, under the
+   `UTExportedTypeDeclarations` key, wrap the existing `<string>` in an 
+   `<array>` and add the required extensions. To reregister, `touch` the 
+   application binary (`Contents/MacOS/Mail`) and run `lsregister` on the 
+   bundle directory.
+
+2. In `/System/Library/QuickLook/Mail.qlgenerator`, as above, but edit the
+   `UTImportedTypeDeclarations` key.
+
+I have not tested these steps, since they require write permission on the 
+system files (and `sudo` is not enough). The Muttlight GUI could easily be 
+adapted to perform the required modifications (but using it in this way 
+would also required ‘violating’ MacOS' standard security settings).
+
+There is reason to expect the QuickLook plugin to work, as evidenced by 
+running the following command on a suitably renamed mail file.
+
+```
+qlmanage -d 4 -c com.apple.mail.email -g /System/Library/QuickLook/Mail.qlgenerator -p test.hostname\:2,S
+```
+
+But what about Spotlight indexing? The following command correctly imports 
+data from the message headers, but the `kMDItemTextContent` field is not 
+populated. This means that the payload contents will not be indexed (maybe 
+the programmers were worried about Spotlight indexing costs?).
+
+```
+mdimport -d 4 -g /System/Library/Spotlight/Mail.mdimporter ./test.hostname\:2\,S
+````
+
+The same can be observed with a filename like `test.eml`, showing that it is 
+not simply a problem of UTI registration. In fact, googling for ‘spotlight 
+eml files’ unearths a bunch of people trying to work around this limitation.
+
+One approach would be to modify the Muttlight app to update the Mail 
+application and its QuickLook plugin, and to remove the Muttlight QuickLook 
+plugin but to keep the Muttlight spotlight plugin (edited to accept the 
+`com.apple.email.email` UTI). The only obstacle is the System Integrity 
+Protection (SIP) of MacOS. Suggestions on 
+[StackOverflow](https://stackoverflow.com/questions/30768087/restricted-folder-files-in-os-x-el-capitan) 
+include disabling it (requiring a reboot), or making copies of the required 
+applications elsewhere and editing the copies (may not work for Mail.app 
+since it includes a `UTExportedTypeDeclarations` key).
+
+Another approach would be to copy 
+`/System/Library/QuickLook/Mail.qlgenerator` into the Muttlight application 
+and to edit its `Info.plist` file to accept the `org.tbrk.muttlight.email` 
+UTI. This would seem to be an ideal solution: no need to work around SIP, it 
+exploits the Muttlight interface and Spotlight plugins, and use the Mail 
+plugin to generate high-quality previews. Unfortunately, I have not yet been 
+able to make it work. it's possible that the Mail plugin switches internally 
+on the UTI, in which case it won't accept `org.tbrk.muttlight.email`. Maybe 
+hack the binary?
 
