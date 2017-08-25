@@ -498,8 +498,8 @@ Need to learn basic Mac GUI concepts:
 * [Rows with checkboxes](https://stackoverflow.com/a/10817372)
 * [Building from the commandline](https://developer.apple.com/library/content/technotes/tn2339/_index.html)
 
-Exploiting existing Apple plugins
-=================================
+Exploiting Apple plugins
+========================
 
 MacOS already includes the following applications and plugins
 ```
@@ -565,5 +565,5 @@ exploits the Muttlight interface and Spotlight plugins, and use the Mail
 plugin to generate high-quality previews. Unfortunately, I have not yet been 
 able to make it work. it's possible that the Mail plugin switches internally 
 on the UTI, in which case it won't accept `org.tbrk.muttlight.email`. Maybe 
-hack the binary?
+find and directly modify the relevant comparison operand in the binary?
 
