@@ -178,10 +178,10 @@ BOOL updatePlistFilenameExtensions(NSURL *plistPath, NSArray *extensions)
         [NSURL URLWithString: @"Contents/Info.plist"
                relativeToURL:bundle_url],
         [NSURL URLWithString:
-                @"Contents/Library/QuickLook/muttlight-quicklook.qlgenerator"
+	@"Contents/Library/QuickLook/muttlight.qlgenerator/Contents/Info.plist"
                relativeToURL:bundle_url],
         [NSURL URLWithString:
-         @"Contents/Library/Spot/muttlight-spotlight.mdimporter"
+	@"Contents/Library/Spotlight/muttlight.mdimporter/Contents/Info.plist"
                relativeToURL:bundle_url],
     ];
 
