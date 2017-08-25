@@ -16,15 +16,7 @@ Muttlight Launcher was created with Sveinbjörn Þórðarson's
 to launch an [Iterm2](https://www.iterm2.com) session, or failing that, a 
 native Terminal session, with Mutt open on the selected message.
 
-**This application is not yet production ready.**
-
 **Pull requests are welcome.**
-
-## TODO
-
-* Ensure that adding and removing extensions works correctly.
-  Must we retrigger an `mdimport`?
-* Add a help file and screenshots.
 
 ## Building Muttlight
 
