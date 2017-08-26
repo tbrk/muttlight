@@ -36,7 +36,7 @@ EXECUTABLE_NAME:=Muttlight
 PRODUCT_BUNDLE_IDENTIFIER:=org.tbrk.muttlight
 PRODUCT_NAME:=Muttlight
 
-BUNDLE_SHORT_VERSION:=1.0
+BUNDLE_SHORT_VERSION:=1.0.0
 BUNDLE_VERSION:=1
 
 QL_EXECUTABLE_NAME:=muttlight-quicklook
@@ -46,6 +46,8 @@ QL_PRODUCT_NAME:=muttlight-quicklook
 SL_EXECUTABLE_NAME:=muttlight-spotlight
 SL_PRODUCT_BUNDLE_IDENTIFIER:=org.tbrk.muttlight.spotlight
 SL_PRODUCT_NAME:=muttlight-spotlight
+
+DSTDIR:=package/$(EXECUTABLE_NAME).app
 
 ## Mutt object files
 
@@ -82,16 +84,18 @@ MUTT_LIBS:=-lintl -liconv
 
 ## Targets
 
-.PHONY : app package qlpackage slpackage
+.PHONY : app mainpackage qlpackage slpackage dmg
 
 app: package qlpackage slpackage
 
-package: $(DSTDIR)/Contents/MacOS/Muttlight \
-	 $(DSTDIR)/Contents/Resources/Base.lproj/MainMenu.nib \
-	 $(DSTDIR)/Contents/Resources/AppIcon.icns \
-	 $(DSTDIR)/Contents/Info.plist \
-	 $(DSTDIR)/Contents/PkgInfo \
-	 $(DSTDIR)/Contents/MacOS/Mutt\ Launcher.app
+APP_FILES=$(DSTDIR)/Contents/MacOS/Muttlight \
+	  $(DSTDIR)/Contents/Resources/Base.lproj/MainMenu.nib \
+	  $(DSTDIR)/Contents/Resources/AppIcon.icns \
+	  $(DSTDIR)/Contents/Info.plist \
+	  $(DSTDIR)/Contents/PkgInfo \
+	  $(DSTDIR)/Contents/MacOS/Mutt\ Launcher.app
+
+package: $(APP_FILES)
 	@touch $(DSTDIR)/Contents/MacOS/Muttlight
 
 $(BUILD)/fwrapdata.o: fwrapdata.c fwrapdata.h | $(BUILD)
@@ -99,6 +103,21 @@ $(BUILD)/fwrapdata.o: fwrapdata.c fwrapdata.h | $(BUILD)
 
 $(BUILD)/entities.o: entities.c entities.h | $(BUILD)
 	$(CC) -c $< -o $@ $(MACOSX)
+
+# Install package
+
+dmg: Muttlight-$(BUNDLE_SHORT_VERSION).dmg
+Muttlight-$(BUNDLE_SHORT_VERSION).dmg: \
+    		$(APP_FILES) $(QL_FILES) $(SL_FILES) \
+		package/LICENSE package/Applications
+	rm $@
+	hdiutil create -fs HFS+ -volname Muttlight -srcfolder package $@
+
+package/LICENSE:
+	cp ../LICENSE $@
+
+package/Applications:
+	ln -s /Applications $@
 
 # main app and user interface
 
@@ -172,24 +191,26 @@ $(BUILD)/mutt.o: | $(BUILD)
 QL:=./quicklook
 QL_DSTDIR:=$(DSTDIR)/Contents/Library/QuickLook/muttlight.qlgenerator
 
-QUICKLOOK_OBJS:=$(BUILD)/GenerateThumbnailForURL.o \
-		$(BUILD)/GeneratePreviewForURL.o \
-		$(BUILD)/qlmain.o \
-		$(BUILD)/muttiface.o \
-		$(BUILD)/fwrapdata.o \
-		$(BUILD)/entities.o \
-		$(BUILD)/mutt.o
+QL_OBJS:=$(BUILD)/GenerateThumbnailForURL.o \
+	 $(BUILD)/GeneratePreviewForURL.o \
+	 $(BUILD)/qlmain.o \
+	 $(BUILD)/muttiface.o \
+	 $(BUILD)/fwrapdata.o \
+	 $(BUILD)/entities.o \
+	 $(BUILD)/mutt.o
 
-qlpackage: $(QL_DSTDIR)/Contents/MacOS/muttlight-quicklook \
-	   $(QL_DSTDIR)/Contents/Info.plist \
-	   $(QL_DSTDIR)/Contents/Resources/email.css
+QL_FILES=$(QL_DSTDIR)/Contents/MacOS/muttlight-quicklook \
+	 $(QL_DSTDIR)/Contents/Info.plist \
+	 $(QL_DSTDIR)/Contents/Resources/email.css
+
+qlpackage: $(QL_FILES)
 	@touch $(QL_DSTDIR)/Contents/MacOS/muttlight-quicklook
 
-$(QL_DSTDIR)/Contents/MacOS/muttlight-quicklook: $(QUICKLOOK_OBJS) \
+$(QL_DSTDIR)/Contents/MacOS/muttlight-quicklook: $(QL_OBJS) \
 		| $(QL_DSTDIR)/Contents/MacOS
 	MACOSX_DEPLOYMENT_TARGET=$(MACOSX_DEPLOYMENT_TARGET) \
 	$(CC) -bundle -arch $(ARCH) $(CFLAGS) $(MACOSX) \
-		$(CC_LDFLAGS) $(QUICKLOOK_OBJS) \
+		$(CC_LDFLAGS) $(QL_OBJS) \
 		-L$(ULOCAL)/lib $(MUTT_LIBS) -lncurses \
 		-framework CoreServices -framework QuickLook \
 		-o $@
@@ -238,23 +259,25 @@ $(QL_DSTDIR)/Contents/MacOS: | $(QL_DSTDIR)/Contents
 SL:=./spotlight
 SL_DSTDIR:=$(DSTDIR)/Contents/Library/Spotlight/muttlight.mdimporter
 
-SPOTLIGHT_OBJS:=$(BUILD)/GetMetadataForFile.o \
-    		$(BUILD)/slmain.o \
-	        $(BUILD)/muttiface.o \
-	        $(BUILD)/fwrapdata.o \
-	        $(BUILD)/entities.o \
-	        $(BUILD)/mutt.o
+SL_OBJS=$(BUILD)/GetMetadataForFile.o \
+    	$(BUILD)/slmain.o \
+	$(BUILD)/muttiface.o \
+	$(BUILD)/fwrapdata.o \
+	$(BUILD)/entities.o \
+	$(BUILD)/mutt.o
 
-slpackage: $(SL_DSTDIR)/Contents/MacOS/muttlight-spotlight \
-	   $(SL_DSTDIR)/Contents/Info.plist
+SL_FILES=$(SL_DSTDIR)/Contents/MacOS/muttlight-spotlight \
+	 $(SL_DSTDIR)/Contents/Info.plist
+
+slpackage: $(SL_FILES)
 	@touch $(SL_DSTDIR)/Contents/MacOS/muttlight-spotlight
 
-$(SL_DSTDIR)/Contents/MacOS/muttlight-spotlight: $(SPOTLIGHT_OBJS) \
+$(SL_DSTDIR)/Contents/MacOS/muttlight-spotlight: $(SL_OBJS) \
     		$(BUILD)/mutt.o \
 		| $(SL_DSTDIR)/Contents/MacOS
 	MACOSX_DEPLOYMENT_TARGET=$(MACOSX_DEPLOYMENT_TARGET) \
 	$(CC) -fobjc-arc -bundle -arch $(ARCH) $(CFLAGS) $(MACOSX) \
-		$(CC_LDFLAGS) $(SPOTLIGHT_OBJS) \
+		$(CC_LDFLAGS) $(SL_OBJS) \
 		-L$(ULOCAL)/lib $(MUTT_LIBS) -lncurses \
 		-framework CoreServices \
 		-o $@
@@ -308,7 +331,7 @@ clean:
 
 realclean: distclean
 distclean: clean
-	@rm -rf $(DSTDIR)
+	@rm -rf $(DSTDIR) Muttlight-$(BUNDLE_SHORT_VERSION).dmg package
 
 ## Rules
 
