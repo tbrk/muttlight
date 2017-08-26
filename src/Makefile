@@ -110,7 +110,7 @@ dmg: Muttlight-$(BUNDLE_SHORT_VERSION).dmg
 Muttlight-$(BUNDLE_SHORT_VERSION).dmg: \
     		$(APP_FILES) $(QL_FILES) $(SL_FILES) \
 		package/LICENSE package/Applications
-	rm $@
+	rm -f $@
 	hdiutil create -fs HFS+ -volname Muttlight -srcfolder package $@
 
 package/LICENSE:
