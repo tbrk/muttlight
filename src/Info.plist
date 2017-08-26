@@ -29,28 +29,11 @@
 	<key>LSMinimumSystemVersion</key>
 	<string>$(MACOSX_DEPLOYMENT_TARGET)</string>
 	<key>NSHumanReadableCopyright</key>
-	<string>Copyright © 2017 Timothy Bourke. All rights reserved.</string>
+	<string>Copyright © 2017 Timothy Bourke. ABSOLUTELY NO WARRANTY. This is free software (see GPLv2).</string>
 	<key>NSMainNibFile</key>
 	<string>MainMenu</string>
 	<key>NSPrincipalClass</key>
 	<string>NSApplication</string>
-<!--
-	<key>CFBundleDocumentTypes</key>
-	<array>
-	  <dict>
-	    <key>CFBundleTypeName</key>
-	    <string>MailDir Email Message</string>
-	    <key>CFBundleTypeRole</key>
-	    <string>Editor</string>
-	    <key>LSHandlerRank</key>
-	    <string>Owner</string>
-	    <key>LSItemContentTypes</key>
-	    <array>
-	      <string>org.tbrk.muttlight.email</string>
-	    </array>
-	  </dict>
-	</array>
-  -->
 	<key>UTExportedTypeDeclarations</key>
 	<array>
 		<dict>

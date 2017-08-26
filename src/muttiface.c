@@ -3,13 +3,13 @@
  *
  * The maildir_parse_flags and maildir_parse_message functions are taken
  * directly from the mh.c file in the Mutt source code since they are not
- * exported. The mh.c file is released under the GPL 2 and
+ * exported. The mh.c file is released under the GPLv2 and
  * Copyright (C) 1996-2002,2007,2009 Michael R. Elkins <me@mutt.org>
  * Copyright (C) 1999-2005 Thomas Roessler <roessler@does-not-exist.org>
  * Copyright (C) 2010,2013 Michael R. Elkins <me@mutt.org>
  *
  * The handler functions are adapted directly from the handler.c file in
- * the Mutt source code. The handler.c file is released under the GPL 2 and
+ * the Mutt source code. The handler.c file is released under the GPLv2 and
  * Copyright (C) 1996-2000,2002,2010,2013 Michael R. Elkins <me@mutt.org>
  *
  * This program is free software; you can redistribute it and/or modify it
