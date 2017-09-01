@@ -16,6 +16,8 @@ Muttlight Launcher was created with Sveinbjörn Þórðarson's
 to launch an [Iterm2](https://www.iterm2.com) session, or failing that, a 
 native Terminal session, with Mutt open on the selected message.
 
+[Documentation is available elsewhere.](http://www.tbrk.org/software/muttlight.html)
+
 **Pull requests are welcome.**
 
 ## Building Muttlight
